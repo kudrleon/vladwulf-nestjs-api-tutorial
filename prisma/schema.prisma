@@ -23,6 +23,9 @@ model User {
 
   bookmarks Bookmark[]
 
+  requests Request[]
+  questionAnswers QuestionAnswer[]
+
   @@map("users")
 }
 
@@ -39,4 +42,83 @@ model Bookmark {
   user   User @relation(fields: [userId], references: [id])
 
   @@map("bookmarks")
+}
+
+model Questionnaire {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  title       String
+  description String?
+
+  sections QuestionnaireSection[]
+
+  requests Request[]
+
+  @@map("questionnaires")
+}
+
+model QuestionnaireSection {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  title       String
+  description String?
+
+  questionnaireId Int
+  questionnaire   Questionnaire @relation(fields: [questionnaireId], references: [id])
+
+  questions Question[]
+
+  @@map("questionnaireSections")
+}
+
+model Question {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  question String
+
+  questionnaireSectionId Int
+  questionnaireSection   QuestionnaireSection @relation(fields: [questionnaireSectionId], references: [id])
+
+  questionAnswers QuestionAnswer[]
+
+  @@map("questions")
+}
+
+model Request {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  userId Int
+  user User @relation(fields: [userId], references: [id])
+
+  questionnaireId Int
+  questionnaire   Questionnaire @relation(fields: [questionnaireId], references: [id])
+
+  answers QuestionAnswer[]
+
+  @@map("requests")
+}
+
+model QuestionAnswer {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  userId Int
+  user User @relation(fields: [userId], references: [id])
+
+  requestId Int
+  request   Request @relation(fields: [requestId], references: [id])
+
+  questionId Int
+  question Question @relation(fields: [questionId], references: [id])
+
+  @@map("qustionAnswers")
 }
