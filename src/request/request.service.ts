@@ -12,8 +12,17 @@ import {
 export class RequestService {
   constructor(private prisma: PrismaService) {}
 
-  create(createRequestDto: CreateRequestDto) {
-    return 'This action adds a new request';
+  async create(
+    createRequestDto: CreateRequestDto,
+  ) {
+    const request =
+      await this.prisma.request.create({
+        data: {
+          ...createRequestDto,
+        },
+      });
+
+    return request;
   }
 
   getRequests() {
