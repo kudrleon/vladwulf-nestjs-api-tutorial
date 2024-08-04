@@ -11,6 +11,7 @@ import { PrismaService } from '../src/prisma/prisma.service';
 import { EditUserDto } from '../src/user/dto';
 import { CreateRequestDto } from 'src/request/dto';
 import { CreateQuestionAnswerDto } from 'src/question-answer/dto/create-question-answer.dto';
+import { UpdateQuestionAnswerDto } from 'src/question-answer/dto/update-question-answer.dto';
 
 describe('App e2e Request Function', () => {
   let app: INestApplication;
@@ -266,6 +267,51 @@ describe('App e2e Request Function', () => {
           .expectStatus(201)
           .expectBodyContains(dto.answer)
           .stores('answerId', 'id');
+      });
+      it('should get request with answer by id', () => {
+        return pactum
+          .spec()
+          .get('/requests/{id}')
+          .withPathParams('id', '$S{requestId}')
+          .withHeaders({
+            Authorization:
+              'Bearer $S{userAccessToken}',
+          })
+          .expectStatus(200)
+          .expectBodyContains('$S{requestId}')
+          .expectBodyContains('Test Answer');
+        //.expectJsonMatch({id: '$S{bookmarkId}'}) would have been the correct way of testing to prevent false positive matches with other numbers, user id etc.
+      });
+      it('should update answer', () => {
+        const updateDto: UpdateQuestionAnswerDto =
+          {
+            answer: 'Test 222',
+          };
+        return pactum
+          .spec()
+          .patch('/question-answers/{id}')
+          .withPathParams('id', '$S{answerId}')
+          .withHeaders({
+            Authorization:
+              'Bearer $S{userAccessToken}',
+          })
+          .withBody(updateDto)
+          .expectStatus(200)
+          .expectBodyContains(updateDto.answer);
+      });
+      it('should get request with updated by id', () => {
+        return pactum
+          .spec()
+          .get('/requests/{id}')
+          .withPathParams('id', '$S{requestId}')
+          .withHeaders({
+            Authorization:
+              'Bearer $S{userAccessToken}',
+          })
+          .expectStatus(200)
+          .expectBodyContains('$S{requestId}')
+          .expectBodyContains('Test 222');
+        //.expectJsonMatch({id: '$S{bookmarkId}'}) would have been the correct way of testing to prevent false positive matches with other numbers, user id etc.
       });
     });
 

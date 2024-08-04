@@ -12,19 +12,16 @@ import {
 export class RequestService {
   constructor(private prisma: PrismaService) {}
 
-  async create(
+  create(
     userId: number,
     createRequestDto: CreateRequestDto,
   ) {
-    const request =
-      await this.prisma.request.create({
-        data: {
-          userId,
-          ...createRequestDto,
-        },
-      });
-
-    return request;
+    return this.prisma.request.create({
+      data: {
+        userId,
+        ...createRequestDto,
+      },
+    });
   }
 
   getRequests() {
@@ -35,6 +32,21 @@ export class RequestService {
     return this.prisma.request.findFirst({
       where: {
         id,
+      },
+      include: {
+        questionnaire: {
+          include: {
+            sections: {
+              include: {
+                questions: {
+                  include: {
+                    questionAnswers: true,
+                  },
+                },
+              },
+            },
+          },
+        },
       },
     });
   }

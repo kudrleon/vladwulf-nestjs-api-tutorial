@@ -11,22 +11,19 @@ export class QuestionAnswerService {
     userId: number,
     createQuestionAnswerDto: CreateQuestionAnswerDto,
   ) {
-    const questionAnswer =
-      await this.prisma.questionAnswer.create({
-        data: {
-          userId,
-          ...createQuestionAnswerDto,
-        },
-      });
-
-    return questionAnswer;
+    return this.prisma.questionAnswer.create({
+      data: {
+        userId,
+        ...createQuestionAnswerDto,
+      },
+    });
   }
 
-  async update(
+  update(
     id: number,
     updateQuestionAnswerDto: UpdateQuestionAnswerDto,
   ) {
-    const user = await this.prisma.user.update({
+    return this.prisma.questionAnswer.update({
       where: {
         id,
       },
@@ -34,10 +31,6 @@ export class QuestionAnswerService {
         ...updateQuestionAnswerDto,
       },
     });
-
-    delete user.hash;
-
-    return user;
   }
 
   remove(id: number) {
