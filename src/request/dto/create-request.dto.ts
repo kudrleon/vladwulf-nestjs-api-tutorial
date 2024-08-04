@@ -8,9 +8,5 @@ import {
 export class CreateRequestDto {
   @IsNumber()
   @IsNotEmpty()
-  userId: number;
-
-  @IsNumber()
-  @IsNotEmpty()
   questionnaireId: number;
 }

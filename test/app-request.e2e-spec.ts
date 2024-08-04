@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   INestApplication,
   ValidationPipe,
 } from '@nestjs/common';
@@ -8,10 +9,8 @@ import { AppModule } from '../src/app.module';
 import { AuthDto } from '../src/auth/dto';
 import { PrismaService } from '../src/prisma/prisma.service';
 import { EditUserDto } from '../src/user/dto';
-import {
-  CreateRequestDto,
-  EditRequestDto,
-} from 'src/request/dto';
+import { CreateRequestDto } from 'src/request/dto';
+import { CreateQuestionAnswerDto } from 'src/question-answer/dto/create-question-answer.dto';
 
 describe('App e2e Request Function', () => {
   let app: INestApplication;
@@ -27,6 +26,21 @@ describe('App e2e Request Function', () => {
     app.useGlobalPipes(
       new ValidationPipe({
         whitelist: true,
+        exceptionFactory: (errors) => {
+          const messages = errors.map(
+            (error) =>
+              `${
+                error.property
+              } has wrong value ${
+                error.value
+              }, ${Object.values(
+                error.constraints,
+              ).join(', ')}`,
+          );
+          return new BadRequestException(
+            messages,
+          );
+        },
       }),
     );
     await app.init();
@@ -174,7 +188,6 @@ describe('App e2e Request Function', () => {
 
     describe('Create request', () => {
       const dto: CreateRequestDto = {
-        userId: 1,
         questionnaireId: 1,
       };
       it('should create request', () => {
@@ -188,6 +201,20 @@ describe('App e2e Request Function', () => {
           .withBody(dto)
           .expectStatus(201)
           .stores('requestId', 'id');
+      });
+    });
+
+    describe('Get My requests', () => {
+      it('should get my request', () => {
+        return pactum
+          .spec()
+          .get('/requests/my')
+          .withHeaders({
+            Authorization:
+              'Bearer $S{userAccessToken}',
+          })
+          .expectStatus(200)
+          .expectJsonLength(1);
       });
     });
 
@@ -216,32 +243,31 @@ describe('App e2e Request Function', () => {
               'Bearer $S{userAccessToken}',
           })
           .expectStatus(200)
-          .expectBodyContains('$S{requestId}'); //.expectJsonMatch({id: '$S{bookmarkId}'}) would have been the correct way of testing to prevent false positive matches with other numbers, user id etc.
+          .expectBodyContains('$S{requestId}');
+        //.expectJsonMatch({id: '$S{bookmarkId}'}) would have been the correct way of testing to prevent false positive matches with other numbers, user id etc.
       });
     });
 
-    // describe('Edit bookmark by id', () => {
-    //   const dto: EditBookmarkDto = {
-    //     title:
-    //       'Kubernetes Course - Full Beginners Tutorial (Containerize Your Apps!)',
-    //     description:
-    //       'Learn how to use Kubernetes in this complete course. Kubernetes makes it possible to containerize applications and simplifies app deployment to production.',
-    //   };
-    //   it('should edit bookmark', () => {
-    //     return pactum
-    //       .spec()
-    //       .patch('/bookmarks/{id}')
-    //       .withPathParams('id', '$S{bookmarkId}')
-    //       .withHeaders({
-    //         Authorization:
-    //           'Bearer $S{userAccessToken}',
-    //       })
-    //       .withBody(dto)
-    //       .expectStatus(200)
-    //       .expectBodyContains(dto.title)
-    //       .expectBodyContains(dto.description);
-    //   });
-    // });
+    describe('Create answer', () => {
+      const dto: CreateQuestionAnswerDto = {
+        questionId: 1,
+        requestId: 1,
+        answer: 'Test Answer',
+      };
+      it('should create answer', () => {
+        return pactum
+          .spec()
+          .post('/question-answers')
+          .withHeaders({
+            Authorization:
+              'Bearer $S{userAccessToken}',
+          })
+          .withBody(dto)
+          .expectStatus(201)
+          .expectBodyContains(dto.answer)
+          .stores('answerId', 'id');
+      });
+    });
 
     // describe('Delete bookmark by id', () => {
     //   it('should delete bookmark', () => {

@@ -103,5 +103,7 @@ model QuestionAnswer {
   questionId Int
   question Question @relation(fields: [questionId], references: [id])
 
+  answer String
+
   @@map("qustionAnswers")
 }

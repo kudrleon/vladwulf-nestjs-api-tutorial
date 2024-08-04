@@ -13,11 +13,13 @@ export class RequestService {
   constructor(private prisma: PrismaService) {}
 
   async create(
+    userId: number,
     createRequestDto: CreateRequestDto,
   ) {
     const request =
       await this.prisma.request.create({
         data: {
+          userId,
           ...createRequestDto,
         },
       });
@@ -32,7 +34,7 @@ export class RequestService {
   getRequestById(id: number) {
     return this.prisma.request.findFirst({
       where: {
-        id: id,
+        id,
       },
     });
   }
@@ -40,7 +42,7 @@ export class RequestService {
   getRequestsByUserId(userId: number) {
     return this.prisma.request.findMany({
       where: {
-        userId: userId,
+        userId,
       },
     });
   }

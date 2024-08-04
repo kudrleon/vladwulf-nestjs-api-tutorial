@@ -8,8 +8,8 @@ import {
   Delete,
   ParseIntPipe,
   UseGuards,
+  Req,
 } from '@nestjs/common';
-import { Request } from '@prisma/client';
 import { GetUser } from '../auth/decorator';
 import { JwtGuard } from '../auth/guard';
 import { RequestService } from './request.service';
@@ -18,7 +18,7 @@ import {
   EditRequestDto,
 } from './dto';
 
-//@UseGuards(JwtGuard)
+@UseGuards(JwtGuard)
 @Controller('requests')
 export class RequestController {
   constructor(
@@ -27,10 +27,21 @@ export class RequestController {
 
   @Post()
   create(
+    @GetUser('id') userId: number,
     @Body() createRequestDto: CreateRequestDto,
   ) {
     return this.requestService.create(
+      userId,
       createRequestDto,
+    );
+  }
+
+  @Get('my')
+  async getMyRequests(
+    @GetUser('id') userId: number,
+  ) {
+    return this.requestService.getRequestsByUserId(
+      userId,
     );
   }
 
@@ -45,13 +56,6 @@ export class RequestController {
   ) {
     return this.requestService.getRequestById(
       requestId,
-    );
-  }
-
-  @Get('my')
-  getMyRequest(@GetUser('id') userId: number) {
-    return this.requestService.getRequestsByUserId(
-      userId,
     );
   }
 
