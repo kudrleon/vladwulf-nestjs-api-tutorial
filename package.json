@@ -15,7 +15,7 @@
     "db:test:up": "docker compose up test-db -d",
     "prisma:test:deploy": "dotenv -e .env.test -- prisma migrate deploy",
     "db:test:seed": "dotenv -e .env.test ts-node prisma/seeders/seed.ts",
-    "db:test:restart": "yarn db:test:rm && yarn db:test:up && sleep 1 && yarn prisma:test:deploy && yarn run db:test:seed",
+    "db:test:restart": "yarn db:test:rm && yarn db:test:up && sleep 1 && yarn prisma:test:deploy && sleep 1 && yarn run db:test:seed",
     "prebuild": "rimraf dist",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",

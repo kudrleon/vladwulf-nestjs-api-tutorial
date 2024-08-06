@@ -1,6 +1,7 @@
 import {
   ForbiddenException,
   Injectable,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { AuthDto } from './dto';
@@ -55,7 +56,7 @@ export class AuthService {
       });
     // if user does not exist throw exception
     if (!user)
-      throw new ForbiddenException(
+      throw new UnauthorizedException(
         'Credentials incorrect',
       );
 
@@ -66,7 +67,7 @@ export class AuthService {
     );
     // if password incorrect throw exception
     if (!pwMatches)
-      throw new ForbiddenException(
+      throw new UnauthorizedException(
         'Credentials incorrect',
       );
     return this.signToken(user.id, user.email);
