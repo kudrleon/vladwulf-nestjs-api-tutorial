@@ -45,12 +45,22 @@ describe('App e2e Request Function', () => {
       }),
     );
     await app.init();
-    await app.listen(3333);
+    let port = 3333;
+    await app.listen(port).catch((e) => {
+      if (e.code === 'EADDRINUSE') {
+        port = 8080;
+        console.log(
+          'port 3333 is in use, trying 8080',
+        );
+        return app.listen(port);
+      }
+      console.error(e);
+    });
 
     prisma = app.get(PrismaService);
     await prisma.cleanDb();
     pactum.request.setBaseUrl(
-      'http://localhost:3333',
+      `http://localhost:${port}`,
     );
   });
 
