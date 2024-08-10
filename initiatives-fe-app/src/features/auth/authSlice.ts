@@ -1,15 +1,16 @@
+import { getValueFromLS, saveValueToLS } from '../../utils/saveValueToLS';
+
 import type { PayloadAction } from "@reduxjs/toolkit"
 import { createAppSlice } from "../../app/createAppSlice"
 import { login } from './authAPI';
-import { saveValueToLS } from '../../utils/saveValueToLS';
 
 export interface AuthSliceState {
   token: string | null | false,
-  loginFailed: string | null
+  loginFailed: string | null | boolean,
 }
 
 const initialState: AuthSliceState = {
-  token: null,
+  token: getValueFromLS('token', null),
   loginFailed: null,
 }
 
@@ -35,22 +36,27 @@ export const authSlice = createAppSlice({
     receiveToken: create.asyncThunk(
       async ({userName, password}: { [k: string]: string}) => {
         const response = await login(userName, password)
+        if (!response.ok) {
+          throw new Error(response.statusText)
+        }
         const { access_token } = await response.json();
+        console.log('here', access_token);
         saveValueToLS('token', access_token);
         return access_token;
       },
       {
         pending: state => {
           state.token = null;
-          state.loginFailed = null;
+          state.loginFailed = false;
         },
         fulfilled: (state, action) => {
           state.loginFailed = null;
           state.token += action.payload;
         },
-        rejected: (state, action) => {
+        rejected: (state, { error: { message } }) => {
+          console.log('rejected', message);
           state.token = false;
-          state.loginFailed = action.message;
+          state.loginFailed = message || 'Login failed: unknown error';
         },
       },
     ),

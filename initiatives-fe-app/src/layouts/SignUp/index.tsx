@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
 import {
-  Box, Button,
+  Box,
+  Button,
   CardActions,
   Checkbox,
   FormControlLabel,
@@ -9,15 +9,24 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
+import React, { useState } from 'react';
+
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
-import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import { Navigate } from 'react-router-dom';
 import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import { useAppSelector } from '../../app/hooks';
 
 export const SignUp = () => {
   const [userName, setUserName] = useState('');
   const [password, setPassword] = useState('');
   const [isPassVisible, changePasswordVisibility] = useState(false);
+  const token = useAppSelector(state => state.auth.token);
+  const loginFailed = useAppSelector(state => state.auth.loginFailed);
+  if (token !== null && loginFailed === null) {
+    return <Navigate to={'/'} />;
+  }
   return<Box
     width="calc(100% - 35px)"
     height="calc(100vh - 200px)"

@@ -1,8 +1,11 @@
-import React, { useEffect } from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
+import React, { useEffect } from 'react';
 
+import { useAppSelector } from '../../app/hooks';
 
 export const PrivateRouter = () => {
-  const auth = null;
-  return auth ? <Outlet /> : <Navigate to="/login" />;
+  console.log('here')
+  const token = useAppSelector(state => state.auth.token);
+  console.log('token', token);
+  return token ? <Outlet /> : <Navigate to="/login" />;
 }

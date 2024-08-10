@@ -1,14 +1,15 @@
-import React from "react";
 import {
+  Route,
   BrowserRouter as Router,
-  Routes,
-  Route
+  Routes
 } from "react-router-dom";
+
 import { Home } from './layouts/Home';
-import { NotFound } from './layouts/NotFound';
 import { Login } from './layouts/Login';
-import { SignUp } from './layouts/SignUp';
+import { NotFound } from './layouts/NotFound';
 import { PrivateRouter } from './layouts/PrivateRoutes'
+import React from "react";
+import { SignUp } from './layouts/SignUp';
 
 export default function RoutesMap() {
   return (
@@ -18,11 +19,11 @@ export default function RoutesMap() {
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
-          <Route path="*" element={<NotFound />} />
 
           <Route element={<PrivateRouter />}>
             <Route path="/" element={<Home />} />
           </Route>
+          <Route path="*" element={<NotFound />} />
         </Routes>
     </Router>
   );

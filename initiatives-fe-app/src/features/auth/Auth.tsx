@@ -1,78 +1,126 @@
-import { useState } from "react"
+import "./Auth.module.css";
 
-import { useAppDispatch, useAppSelector } from "../../app/hooks"
-import styles from "./Auth.module.css"
 import {
-  decrement,
-  increment,
-  incrementAsync,
-  incrementByAmount,
-  incrementIfOdd,
-  selectCount,
-  selectStatus,
-} from "./authSlice"
+  Button,
+  CardActions,
+  Checkbox,
+  FormControlLabel,
+  IconButton,
+  InputAdornment,
+  LinearProgress,
+  TextField,
+  Typography,
+} from '@mui/material';
+import { deleteValueFromLS, getValueFromLS, saveValueToLS } from '../../utils/saveValueToLS';
+import { useAppDispatch, useAppSelector } from "../../app/hooks";
+
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import { Link } from 'react-router-dom';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import {
+  receiveToken,
+} from "./authSlice";
+import { useState } from "react";
 
 export const Auth = () => {
   const dispatch = useAppDispatch()
-  const count = useAppSelector(selectCount)
-  const status = useAppSelector(selectStatus)
-  const [incrementAmount, setIncrementAmount] = useState("2")
-
-  const incrementValue = Number(incrementAmount) || 0
-
+  const [login, setLogin] = useState(getValueFromLS('login', ''));
+  const [password, setPassword] = useState('');
+  const [rememberMe, setRememberMe] = useState(getValueFromLS('save_login_checkbox', false));
+  const [isPassVisible, changePasswordVisibility] = useState(false);
+  const loginFailed = useAppSelector(state => state.auth.loginFailed);
+  const token = useAppSelector(state => state.auth.token);
+  const loadingLogin = loginFailed === false && token === null;
   return (
-    <div>
-      <div className={styles.row}>
-        <button
-          className={styles.button}
-          aria-label="Decrement value"
-          onClick={() => dispatch(decrement())}
-        >
-          -
-        </button>
-        <span aria-label="Count" className={styles.value}>
-          {count}
-        </span>
-        <button
-          className={styles.button}
-          aria-label="Increment value"
-          onClick={() => dispatch(increment())}
-        >
-          +
-        </button>
-      </div>
-      <div className={styles.row}>
-        <input
-          className={styles.textbox}
-          aria-label="Set increment amount"
-          value={incrementAmount}
-          type="number"
-          onChange={e => {
-            setIncrementAmount(e.target.value)
+
+    <Card
+      sx={{ minWidth: 275, maxWidth: 1080 }}
+    >
+      <CardContent>
+        {
+           loginFailed && <Typography color="error">
+            {loginFailed}
+          </Typography>
+        }
+        {
+          loadingLogin && <Typography color="error">
+            <LinearProgress />
+          </Typography>
+        }
+        <Typography gutterBottom variant="h5">
+          Welcome!
+        </Typography>
+        <Typography component="div">
+          Please enter your login credentials below
+        </Typography>
+        <TextField
+          id="outlined-basic"
+          label="Login"
+          variant="outlined"
+          fullWidth={true}
+          value={login}
+          onChange={({ target: { value } }) => setLogin(value)}
+          sx={{
+            marginTop: '20px'
           }}
+          disabled={loadingLogin}
         />
-        <button
-          className={styles.button}
-          onClick={() => dispatch(incrementByAmount(incrementValue))}
-        >
-          Add Amount
-        </button>
-        <button
-          className={styles.asyncButton}
-          disabled={status !== "idle"}
-          onClick={() => dispatch(incrementAsync(incrementValue))}
-        >
-          Add Async
-        </button>
-        <button
-          className={styles.button}
-          onClick={() => {
-            dispatch(incrementIfOdd(incrementValue))
+        <TextField
+          id="outlined-basic"
+          label="Password"
+          variant="outlined"
+          fullWidth={true}
+          type={isPassVisible ? 'text' : 'password'}
+          value={password}
+          sx={{
+            marginTop: '20px'
           }}
+          onChange={({ target: { value } }) => setPassword(value)}
+          InputProps={{
+            endAdornment: <InputAdornment position="end">
+              <IconButton
+                aria-label="toggle password visibility"
+                onClick={() => changePasswordVisibility(!isPassVisible)}
+                edge="end"
+              >
+                {!isPassVisible ? <VisibilityOff /> : <Visibility />}
+              </IconButton>
+            </InputAdornment>,
+          }}
+          disabled={loadingLogin}
+        />
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={rememberMe}
+              onChange={(_e, checked) => setRememberMe(!rememberMe)}
+            />
+          }
+          disabled={loadingLogin}
+          label="Remember my login?" />
+        <Typography>
+          <Link to="/signup">Don't have account, click here</Link>
+        </Typography>
+      </CardContent>
+      <CardActions>
+        <Button
+          variant="contained"
+          onClick={() => {
+            saveValueToLS('save_login_checkbox', rememberMe);
+            if(rememberMe) {
+              saveValueToLS('login', login);
+            } else {
+              deleteValueFromLS('login')
+            }
+            dispatch(receiveToken({ userName: login, password }))
+          }}
+          disabled={loadingLogin}
         >
-          Add If Odd
-        </button>
-      </div>
-    </div>
+          Login
+        </Button>
+      </CardActions>
+    </Card>
   )
 }

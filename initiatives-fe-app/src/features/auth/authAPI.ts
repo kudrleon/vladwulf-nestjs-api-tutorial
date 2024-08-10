@@ -5,12 +5,15 @@ export const fetchCount = (amount = 1) => {
   )
 }
 
-export const login = (userName: string, password: string) => {
-  return fetch(
-    'http://localhost:8080/signin',
+export const login = (userName: string, password: string) =>
+  fetch(
+    'http://localhost:3333/auth/signin',
     {
       method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
       body: JSON.stringify({ email: userName, password }),
     }
   )
-}
