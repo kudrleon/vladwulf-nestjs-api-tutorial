@@ -7,6 +7,7 @@ import {
 } from "react-router-dom";
 import { Home } from './layouts/Home';
 import { NotFound } from './layouts/NotFound';
+import { Login } from './layouts/Login';
 
 export default function RoutesMap() {
   return (
@@ -30,6 +31,7 @@ export default function RoutesMap() {
             renders the first one that matches the current URL. */}
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </div>
