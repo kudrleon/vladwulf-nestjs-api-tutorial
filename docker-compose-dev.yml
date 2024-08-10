@@ -13,14 +13,8 @@ services:
   dev-db-seed:
     build:
       context: ./initiatives-api-server
-      dockerfile_inline: |
-        FROM node:18-slim
-        WORKDIR /app
-        COPY package.json ./
-        COPY yarn.lock ./
-        COPY prisma ./
-        RUN yarn install
-        CMD yarn prisma:dev:deploy && yarn db:dev:seed
+      dockerfile: Dockerfile.dev.seed
+        
     volumes:
       - ./initiatives-api-server:/app
     environment:
@@ -32,11 +26,13 @@ services:
     depends_on:
       - dev-db
   initiatives-dev-api:
+    platform: linux/arm64
     build:
       context: ./initiatives-api-server
       dockerfile: Dockerfile.dev
     volumes:
       - ./initiatives-api-server:/app
+      - ignore:/app/node_modules/
     ports:
       - 8080:3333
     environment:
@@ -47,6 +43,7 @@ services:
       - DATABASE_NAME=nest
     depends_on:
       - dev-db
+      - dev-db-seed
   initiatives-dev-client:
     build:
       context: ./initiatives-fe-app
@@ -59,5 +56,7 @@ services:
       - initiatives-dev-api
     networks:
       - takedo-dev-network
+volumes:
+  ignore:
 networks:
   takedo-dev-network:

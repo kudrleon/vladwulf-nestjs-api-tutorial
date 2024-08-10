@@ -1,0 +1,7 @@
+FROM node:18
+WORKDIR /app
+COPY package.json ./
+COPY yarn.lock ./
+COPY prisma ./
+RUN yarn install
+CMD yarn prisma:dev:deploy && yarn db:dev:seed
