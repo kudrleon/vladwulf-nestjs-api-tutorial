@@ -1,0 +1,63 @@
+version: '3.8'
+services:
+  dev-db:
+    image: postgres:13
+    ports:
+      - 5434:5432
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123
+      POSTGRES_DB: nest
+    networks:
+      - takedo-dev-network
+  dev-db-seed:
+    build:
+      context: ./initiatives-api-server
+      dockerfile_inline: |
+        FROM node:18-slim
+        WORKDIR /app
+        COPY package.json ./
+        COPY yarn.lock ./
+        COPY prisma ./
+        RUN yarn install
+        CMD yarn prisma:dev:deploy && yarn db:dev:seed
+    volumes:
+      - ./initiatives-api-server:/app
+    environment:
+      - DATABASE_HOST=dev-db
+      - DATABASE_PORT=5432
+      - DATABASE_USER=postgres
+      - DATABASE_PASSWORD=123
+      - DATABASE_NAME=nest
+    depends_on:
+      - dev-db
+  initiatives-dev-api:
+    build:
+      context: ./initiatives-api-server
+      dockerfile: Dockerfile.dev
+    volumes:
+      - ./initiatives-api-server:/app
+    ports:
+      - 8080:3333
+    environment:
+      - DATABASE_HOST=dev-db
+      - DATABASE_PORT=5432
+      - DATABASE_USER=postgres
+      - DATABASE_PASSWORD=123
+      - DATABASE_NAME=nest
+    depends_on:
+      - dev-db
+  initiatives-dev-client:
+    build:
+      context: ./initiatives-fe-app
+      dockerfile: Dockerfile.dev
+    volumes:
+      - ./initiatives-fe-app:/app
+    ports:
+      - 3000:5173
+    depends_on:
+      - initiatives-dev-api
+    networks:
+      - takedo-dev-network
+networks:
+  takedo-dev-network:

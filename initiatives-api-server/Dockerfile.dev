@@ -1,0 +1,8 @@
+FROM node:18-slim
+
+WORKDIR /app
+
+RUN yarn install
+
+CMD [ "yarn", "start:dev" ]
+
