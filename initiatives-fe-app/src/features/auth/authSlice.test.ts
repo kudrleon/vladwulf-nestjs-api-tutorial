@@ -1,13 +1,13 @@
 import type { AppStore } from "../../app/store"
 import { makeStore } from "../../app/store"
-import type { CounterSliceState } from "./counterSlice"
+import type { CounterSliceState } from "./authSlice"
 import {
-  counterSlice,
+  authSlice,
   decrement,
   increment,
   incrementByAmount,
   selectCount,
-} from "./counterSlice"
+} from "./authSlice"
 
 interface LocalTestContext {
   store: AppStore
@@ -26,7 +26,7 @@ describe<LocalTestContext>("counter reducer", it => {
   })
 
   it("should handle initial state", () => {
-    expect(counterSlice.reducer(undefined, { type: "unknown" })).toStrictEqual({
+    expect(authSlice.reducer(undefined, { type: "unknown" })).toStrictEqual({
       value: 0,
       status: "idle",
     })

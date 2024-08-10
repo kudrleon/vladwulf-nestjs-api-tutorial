@@ -4,3 +4,13 @@ export const fetchCount = (amount = 1) => {
     setTimeout(() => resolve({ data: amount }), 500),
   )
 }
+
+export const login = (userName: string, password: string) => {
+  return fetch(
+    'http://localhost:8080/signin',
+    {
+      method: 'POST',
+      body: JSON.stringify({ email: userName, password }),
+    }
+  )
+}

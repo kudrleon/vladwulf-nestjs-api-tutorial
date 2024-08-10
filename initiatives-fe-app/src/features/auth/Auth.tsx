@@ -1,7 +1,7 @@
 import { useState } from "react"
 
 import { useAppDispatch, useAppSelector } from "../../app/hooks"
-import styles from "./Counter.module.css"
+import styles from "./Auth.module.css"
 import {
   decrement,
   increment,
@@ -10,9 +10,9 @@ import {
   incrementIfOdd,
   selectCount,
   selectStatus,
-} from "./counterSlice"
+} from "./authSlice"
 
-export const Counter = () => {
+export const Auth = () => {
   const dispatch = useAppDispatch()
   const count = useAppSelector(selectCount)
   const status = useAppSelector(selectStatus)
