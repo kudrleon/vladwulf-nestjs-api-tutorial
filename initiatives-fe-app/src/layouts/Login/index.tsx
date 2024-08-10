@@ -10,7 +10,6 @@ import { useAppSelector } from "../../app/hooks";
 export const Login = () => {
   const token = useAppSelector(state => state.auth.token);
   const loginFailed = useAppSelector(state => state.auth.loginFailed);
-  console.log(loginFailed, token)
   if (token !== null && loginFailed === null) {
     return <Navigate to={'/'} />;
   }

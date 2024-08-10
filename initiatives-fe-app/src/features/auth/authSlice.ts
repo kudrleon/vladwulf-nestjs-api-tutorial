@@ -21,13 +21,6 @@ export const authSlice = createAppSlice({
   initialState,
   // The `reducers` field lets us define reducers and generate associated actions
   reducers: create => ({
-    setToken: create.reducer((state, action: PayloadAction<string>) => {
-      // Redux Toolkit allows us to write "mutating" logic in reducers. It
-      // doesn't actually mutate the state because it uses the Immer library,
-      // which detects changes to a "draft state" and produces a brand new
-      // immutable state based off those changes
-      state.token = action.payload
-    }),
     // The function below is called a thunk and allows us to perform async logic. It
     // can be dispatched like a regular action: `dispatch(incrementAsync(10))`. This
     // will call the thunk with the `dispatch` function as the first argument. Async
@@ -70,7 +63,7 @@ export const authSlice = createAppSlice({
 })
 
 // Action creators are generated for each case reducer function.
-export const { setToken, receiveToken } =
+export const { receiveToken } =
   authSlice.actions
 
 // Selectors returned by `slice.selectors` take the root state as their first argument.
