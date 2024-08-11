@@ -50,7 +50,7 @@ services:
       - ./initiatives-api-server:/app
       - ignore:/app/node_modules/
     ports:
-      - ${BE_API_PORT}:${BE_API_PORT}
+      - ${BE_API_PORT}:3333
     environment:
         <<: [*db-variables, *jwt-variables, *be-variables]
     depends_on:
@@ -63,12 +63,10 @@ services:
     build:
       context: ./initiatives-fe-app
       dockerfile: Dockerfile.dev
-      args:
-        <<: *fe-variables
     volumes:
       - ./initiatives-fe-app:/app
     ports:
-      - ${FE_PORT}:5173
+      - ${FE_PORT}:${FE_PORT}
     depends_on:
       - initiatives-dev-api
     environment:
