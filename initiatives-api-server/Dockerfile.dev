@@ -2,8 +2,11 @@ FROM node:18-slim
 
 WORKDIR /app
 
+RUN apt-get update && apt-get install -y ca-certificates openssl
+
 COPY ./ ./
 RUN yarn
+RUN yarn prisma generate
 
 CMD [ "yarn", "start:dev" ]
 
