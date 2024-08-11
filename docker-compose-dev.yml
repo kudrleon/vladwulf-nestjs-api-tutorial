@@ -25,6 +25,8 @@ services:
       POSTGRES_USER: ${DATABASE_USER}
       POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
       POSTGRES_DB: ${DATABASE_NAME}
+    volumes:
+       - ./postgres_data:/var/lib/postgresql/data/
     networks:
       - takedo-dev-network
 

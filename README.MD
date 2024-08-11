@@ -18,14 +18,18 @@ To run specific service use first command with added service name like this:
 ```
 List of services with env variables to configure your instance:
 - dev-db - database intended for development
-  |---------------------|----------------------------------------|---------------|
+- To clear database please:
+  - stop db container
+  - delete folder postgres_data 
+  - start db container
+  
   | Variable name       |              Description               | Default value |
   |---------------------|----------------------------------------|---------------|
   | `DATABASE_USER`     | Will create specific user in postgres  | `postgres`    |
   | `DATABASE_PASSWORD` | Will set password of created user      | `123`         |
   | `DATABASE_NAME`     | Name of db created in postgres         | `nest`        |
 
-- dev-db-seed - seed database with test data, pass env variable `FRESH_START=true` to have all existing data wiped
+- dev-db-seed - seed database with test data
   
   | Variable name       |              Description               | Default value |
   |---------------------|----------------------------------------|---------------|
