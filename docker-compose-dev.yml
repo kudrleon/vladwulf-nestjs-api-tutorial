@@ -1,30 +1,46 @@
 version: '3.8'
+x-db-variables: &db-variables
+  DATABASE_HOST: ${DATABASE_HOST}
+  DATABASE_PORT: ${DATABASE_PORT}
+  DATABASE_USER: ${DATABASE_USER}
+  DATABASE_PASSWORD: ${DATABASE_PASSWORD}
+  DATABASE_NAME: ${DATABASE_NAME}
+
+x-be-variables: &be-variables
+  BE_API_PORT: ${BE_API_PORT}
+  BE_API_HOST: ${BE_API_HOST} 
+
+x-jwt-variables: &jwt-variables
+  JWT_SECRET: ${JWT_SECRET}
+
+x-fe-variables: &fe-variables
+  FE_PORT: ${FE_PORT}
+
 services:
   dev-db:
     image: postgres:13
     ports:
       - 5434:5432
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: 123
-      POSTGRES_DB: nest
+      POSTGRES_USER: ${DATABASE_USER}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+      POSTGRES_DB: ${DATABASE_NAME}
     networks:
       - takedo-dev-network
+
   dev-db-seed:
     build:
       context: ./initiatives-api-server
       dockerfile: Dockerfile.dev.seed
-        
     volumes:
       - ./initiatives-api-server:/app
     environment:
-      - DATABASE_HOST=dev-db
-      - DATABASE_PORT=5432
-      - DATABASE_USER=postgres
-      - DATABASE_PASSWORD=123
-      - DATABASE_NAME=nest
+        <<: *db-variables
     depends_on:
       - dev-db
+    networks:
+      - takedo-dev-network
+
   initiatives-dev-api:
     platform: linux/arm64
     build:
@@ -34,28 +50,29 @@ services:
       - ./initiatives-api-server:/app
       - ignore:/app/node_modules/
     ports:
-      - 8080:3333
+      - ${BE_API_PORT}:3333
     environment:
-      - DATABASE_HOST=dev-db
-      - DATABASE_PORT=5432
-      - DATABASE_USER=postgres
-      - DATABASE_PASSWORD=123
-      - DATABASE_NAME=nest
+        <<: [*db-variables, *jwt-variables, *be-variables]
     depends_on:
       - dev-db
       - dev-db-seed
+    networks:
+      - takedo-dev-network
+
   initiatives-dev-client:
     build:
       context: ./initiatives-fe-app
       dockerfile: Dockerfile.dev
+      args:
+        <<: *fe-variables
     volumes:
       - ./initiatives-fe-app:/app
     ports:
-      - 3000:5173
+      - ${FE_PORT}:5173
     depends_on:
       - initiatives-dev-api
-    networks:
-      - takedo-dev-network
+    environment:
+        <<: [*be-variables, *fe-variables]
 volumes:
   ignore:
 networks:

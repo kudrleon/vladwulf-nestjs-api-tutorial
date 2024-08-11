@@ -1,7 +1,9 @@
 FROM node:18
 WORKDIR /app
+RUN apt-get update && apt-get install -y ca-certificates openssl
 COPY package.json ./
 COPY yarn.lock ./
 COPY prisma ./
 RUN yarn install
+RUN yarn prisma generate
 CMD yarn prisma:dev:deploy && yarn db:dev:seed
