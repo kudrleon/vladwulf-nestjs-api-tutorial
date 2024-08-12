@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --no-open",
     "start": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
@@ -31,6 +31,7 @@
     "@testing-library/jest-dom": "^6.2.0",
     "@testing-library/react": "^14.1.2",
     "@testing-library/user-event": "^14.5.2",
+    "@types/node": "^20.14.15",
     "@types/react": "^18.2.47",
     "@types/react-dom": "^18.2.18",
     "@vitejs/plugin-react": "^4.2.1",
@@ -44,5 +45,10 @@
     "typescript": "^5.3.3",
     "vite": "^5.0.11",
     "vitest": "^1.2.0"
+  },
+  "overrides": {
+    "vite": {
+      "rollup": "npm:@rollup/wasm-node"
+    }
   }
 }

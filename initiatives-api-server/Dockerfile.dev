@@ -1,12 +1,11 @@
-FROM node:18-slim
+FROM node:20-slim
 
 WORKDIR /app
 
 RUN apt-get update && apt-get install -y ca-certificates openssl
 
 COPY ./ ./
-RUN yarn
-RUN yarn prisma generate
+RUN yarn global add @nestjs/cli
+RUN yarn install --frozen-lockfile
 
-CMD [ "yarn", "start:dev" ]
-
+CMD yarn start:dev --preserveWatchOutput

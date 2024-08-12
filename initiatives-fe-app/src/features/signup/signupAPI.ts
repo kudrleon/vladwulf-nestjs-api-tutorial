@@ -1,6 +1,8 @@
+import { be_base_url } from "../../utils/consts";
+
 export const signUp = (userName: string, password: string) =>
   fetch(
-    'http://localhost:3333/auth/signup',
+    `${be_base_url}/auth/signup`,
     {
       method: 'POST',
       headers: {

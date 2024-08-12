@@ -12,6 +12,11 @@ If you want to see them real-time use:
     docker compose logs -f
 ```
 
+In order to stop containers:
+```shell
+    docker compose -f docker-compose-dev.yml down
+```
+
 To run specific service use first command with added service name like this:
 ```shell
     docker compose -f docker-compose-dev.yml up {service name} -d
@@ -34,7 +39,7 @@ List of services with env variables to configure your instance:
   | Variable name       |              Description               | Default value |
   |---------------------|----------------------------------------|---------------|
   | `DATABASE_HOST`     | hostname of postgres                   | `dev-db`      |
-  | `DATABASE_PORT`     | port with postgres instance running    | `5434`        |               
+  | `DATABASE_PORT`     | port with postgres instance running    | `5432`        |               
   | `DATABASE_USER`     | what user use to login                 | `postgres`    |              
   | `DATABASE_PASSWORD` | what password use to login             | `123`         |             
   | `DATABASE_NAME`     | which db to query                      | `nest`        |  
@@ -43,7 +48,7 @@ List of services with env variables to configure your instance:
   | Variable name       |              Description               | Default value |
   |---------------------|----------------------------------------|---------------|
   | `DATABASE_HOST`     | hostname of postgres                   | `dev-db`      |
-  | `DATABASE_PORT`     | port with postgres instance running    | `5434`        |             
+  | `DATABASE_PORT`     | port with postgres instance running    | `5432`        |             
   | `DATABASE_USER`     | what user use to login                 | `postgres`    |      
   | `DATABASE_PASSWORD` | what password use to login             | `123`         |     
   | `DATABASE_NAME`     | which db to query                      | `nest`        |   

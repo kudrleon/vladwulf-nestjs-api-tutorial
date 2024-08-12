@@ -1,8 +1,8 @@
-FROM node:18-slim
+FROM node:20-slim
 WORKDIR /app
 RUN apt-get update && apt-get install -y ca-certificates openssl
 COPY package.json ./
 COPY yarn.lock ./
 COPY prisma ./
-RUN yarn install
-CMD yarn prisma generate && yarn prisma:dev:deploy && yarn db:dev:seed
+RUN yarn install --frozen-lockfile
+CMD yarn prisma:dev:deploy && yarn db:dev:seed

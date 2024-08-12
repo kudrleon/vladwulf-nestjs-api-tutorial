@@ -50,13 +50,12 @@ services:
       - takedo-dev-network
 
   initiatives-dev-api:
-    platform: linux/arm64
     build:
       context: ./initiatives-api-server
       dockerfile: Dockerfile.dev
     volumes:
       - ./initiatives-api-server:/app
-      - ignore:/app/node_modules/
+      - ignore-be-node_modules:/app/node_modules/
     ports:
       - ${BE_API_PORT}:3333
     environment:
@@ -73,6 +72,7 @@ services:
       dockerfile: Dockerfile.dev
     volumes:
       - ./initiatives-fe-app:/app
+      - ignore-fe-node_modules:/app/node_modules/
     ports:
       - ${FE_PORT}:${FE_PORT}
     depends_on:
@@ -80,6 +80,7 @@ services:
     environment:
         <<: [*be-variables, *fe-variables]
 volumes:
-  ignore:
+  ignore-be-node_modules:
+  ignore-fe-node_modules:
 networks:
   takedo-dev-network:
