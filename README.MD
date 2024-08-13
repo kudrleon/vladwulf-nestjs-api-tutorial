@@ -44,7 +44,8 @@ List of services with env variables to configure your instance:
   | `DATABASE_PASSWORD` | what password use to login             | `123`         |             
   | `DATABASE_NAME`     | which db to query                      | `nest`        |  
 - initiatives-dev-api - this will start be 
-  
+  - prisma studio is running on port 5555
+  - in dev mode api is on /api/ route
   | Variable name       |              Description               | Default value |
   |---------------------|----------------------------------------|---------------|
   | `DATABASE_HOST`     | hostname of postgres                   | `dev-db`      |
