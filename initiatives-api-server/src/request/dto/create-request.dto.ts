@@ -8,13 +8,9 @@ import {
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateRequestDto {
-  @IsString()
-  @IsNotEmpty()
-  id: string;
-
   @ApiProperty()
   @IsNumber()
-  @IsNotEmpty()
+  @IsOptional()
   questionnaireId: number;
   
   @ApiProperty()

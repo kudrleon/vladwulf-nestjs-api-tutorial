@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Get,
+  Param,
   Patch,
   UseGuards,
 } from '@nestjs/common';
@@ -20,6 +21,14 @@ export class UserController {
     return user;
   }
 
+  @Get(':id')
+  getUserById(@Param('id') id: string) {
+    const user = this.userService.retrieveUserById(id);
+    return Object.fromEntries(
+      Object.entries(user).filter(([key]) => !'hash'.includes(key)) //By some reason still will return hash
+    );
+  }
+
   @Patch()
   editUser(
     @GetUser('id') userId: number,
@@ -27,4 +36,6 @@ export class UserController {
   ) {
     return this.userService.editUser(userId, dto);
   }
+
+  
 }

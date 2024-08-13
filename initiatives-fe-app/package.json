@@ -21,6 +21,7 @@
     "@mui/icons-material": "^5.16.7",
     "@mui/material": "^5.16.7",
     "@reduxjs/toolkit": "^2.0.1",
+    "axios": "^1.7.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-redux": "^9.1.0",
@@ -50,5 +51,44 @@
     "vite": {
       "rollup": "npm:@rollup/wasm-node"
     }
-  }
+  },
+  "vsc-organize-imports": {
+      "orderSpecifiers": true,
+      "orderSpecifiersAsSingleLine": true,
+      "baseUrl": "src",
+      "emptyLinesAfterImports": 1,
+      "emptyLinesBetweenFilledGroups": 1,
+      "groups": [
+         {
+            "groups": [
+               "global"
+            ],
+            "sortBy": "path",
+            "emptyLines": true
+         },
+         {
+            "groups": [
+               "absolute"
+            ],
+            "sortBy": "path",
+            "emptyLines": true
+         },
+         {
+            "groups": [
+               "relative"
+            ],
+            "sortBy": "path",
+            "emptyLines": true
+         },
+         {
+            "groups": [
+               "globalDirect",
+               "absoluteDirect",
+               "relativeDirect"
+            ],
+            "sortBy": "path",
+            "emptyLines": true
+         }
+      ]
+   }
 }

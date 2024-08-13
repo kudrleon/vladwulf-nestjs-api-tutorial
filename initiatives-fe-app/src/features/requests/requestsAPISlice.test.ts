@@ -1,3 +1,6 @@
+import type { AppStore } from "../../app/store"
+import { makeStore } from "../../app/store"
+import type { CounterSliceState } from "./authSlice"
 import {
   authSlice,
   decrement,
@@ -5,10 +8,6 @@ import {
   incrementByAmount,
   selectCount,
 } from "./authSlice"
-
-import type { AppStore } from "../../app/store"
-import type { CounterSliceState } from "./signUpSlice"
-import { makeStore } from "../../app/store"
 
 interface LocalTestContext {
   store: AppStore

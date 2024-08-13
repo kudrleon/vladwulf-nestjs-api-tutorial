@@ -82,16 +82,16 @@ model Request {
   userId Int
   user User @relation(fields: [userId], references: [id])
 
-  questionnaireId Int
-  questionnaire   Questionnaire @relation(fields: [questionnaireId], references: [id])
-
-  answers QuestionAnswer[]
-
   businessOwner String
 
   title       String
 
   summary     String
+
+  questionnaireId Int?
+  questionnaire   Questionnaire? @relation(fields: [questionnaireId], references: [id])
+
+  answers QuestionAnswer[]
 
   @@map("requests")
 }

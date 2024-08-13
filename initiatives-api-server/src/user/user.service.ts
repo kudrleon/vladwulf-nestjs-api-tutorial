@@ -1,6 +1,6 @@
+import { EditUserDto } from './dto';
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { EditUserDto } from './dto';
 
 @Injectable()
 export class UserService {
@@ -22,5 +22,16 @@ export class UserService {
     delete user.hash;
 
     return user;
+  }
+  retrieveUserById(id: string) {
+    const parsedId = parseInt(id, 10);
+    if (isNaN(parsedId)) {
+      return null;
+    }
+    return this.prisma.user.findUnique({
+      where: {
+        id: parsedId,
+      },
+    });
   }
 }
