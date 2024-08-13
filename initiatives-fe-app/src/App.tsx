@@ -1,8 +1,10 @@
 import "./App.css"
-import { Counter } from "./features/counter/Counter"
-import { Quotes } from "./features/quotes/Quotes"
-import logo from "./logo.svg"
 import RoutesMap from './RoutesMap';
+
+import '@fontsource/roboto/300.css';
+import '@fontsource/roboto/400.css';
+import '@fontsource/roboto/500.css';
+import '@fontsource/roboto/700.css';
 
 const App = () => {
   return (

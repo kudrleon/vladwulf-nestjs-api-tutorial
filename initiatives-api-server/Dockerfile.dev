@@ -1,0 +1,14 @@
+FROM node:20-slim
+
+WORKDIR /app
+
+RUN apt-get update && apt-get --assume-yes install -y ca-certificates openssl
+RUN apt-get --assume-yes install procps 
+
+COPY ./ ./
+
+RUN yarn global add @nestjs/cli
+RUN yarn install --frozen-lockfile
+
+# I just cannot justify running prisma from separate containers with most of the same dependencies 😅
+CMD npx --yes prisma studio & yarn start:dev --preserveWatchOutput

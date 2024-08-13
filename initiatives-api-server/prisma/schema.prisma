@@ -3,6 +3,7 @@
 
 generator client {
   provider = "prisma-client-js"
+  binaryTargets = ["native"]
 }
 
 datasource db {
@@ -74,15 +75,21 @@ model Question {
 }
 
 model Request {
-  id        Int      @id @default(autoincrement())
+  id        String      @id @default(uuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   userId Int
   user User @relation(fields: [userId], references: [id])
 
-  questionnaireId Int
-  questionnaire   Questionnaire @relation(fields: [questionnaireId], references: [id])
+  businessOwner String
+
+  title       String
+
+  summary     String
+
+  questionnaireId Int?
+  questionnaire   Questionnaire? @relation(fields: [questionnaireId], references: [id])
 
   answers QuestionAnswer[]
 
@@ -97,7 +104,7 @@ model QuestionAnswer {
   userId Int
   user User @relation(fields: [userId], references: [id])
 
-  requestId Int
+  requestId String
   request   Request @relation(fields: [requestId], references: [id])
 
   questionId Int

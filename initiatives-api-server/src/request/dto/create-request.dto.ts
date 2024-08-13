@@ -1,12 +1,30 @@
 import {
   IsNotEmpty,
+  IsNumber,
   IsOptional,
   IsString,
-  IsNumber,
 } from 'class-validator';
 
+import { ApiProperty } from '@nestjs/swagger';
+
 export class CreateRequestDto {
+  @ApiProperty()
   @IsNumber()
-  @IsNotEmpty()
+  @IsOptional()
   questionnaireId: number;
+  
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  businessOwner: string;
+  
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  title: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  summary: string
 }

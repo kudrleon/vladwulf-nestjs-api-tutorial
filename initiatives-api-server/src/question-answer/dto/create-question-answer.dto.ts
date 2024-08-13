@@ -1,13 +1,13 @@
 import {
-  IsNumber,
   IsNotEmpty,
+  IsNumber,
   IsString,
 } from 'class-validator';
 
 export class CreateQuestionAnswerDto {
-  @IsNumber()
+  @IsString()
   @IsNotEmpty()
-  requestId: number;
+  requestId: string;
 
   @IsNumber()
   @IsNotEmpty()
@@ -16,4 +16,8 @@ export class CreateQuestionAnswerDto {
   @IsString()
   @IsNotEmpty()
   answer: string;
+
+  @IsNumber()
+  @IsNotEmpty()
+  userId: number;
 }
