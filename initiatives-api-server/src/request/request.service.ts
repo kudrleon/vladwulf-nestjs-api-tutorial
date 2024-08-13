@@ -1,9 +1,10 @@
-import { Injectable } from '@nestjs/common';
-import { PrismaService } from '../prisma/prisma.service';
 import {
   CreateRequestDto,
   EditRequestDto,
 } from './dto';
+
+import { Injectable } from '@nestjs/common';
+import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
 export class RequestService {
@@ -25,7 +26,7 @@ export class RequestService {
     return this.prisma.request.findMany();
   }
 
-  getRequestById(id: number) {
+  getRequestById(id: string) {
     return this.prisma.request.findFirst({
       where: {
         id,

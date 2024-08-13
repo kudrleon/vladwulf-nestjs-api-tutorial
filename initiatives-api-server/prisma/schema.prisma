@@ -75,7 +75,7 @@ model Question {
 }
 
 model Request {
-  id        Int      @id @default(autoincrement())
+  id        String      @id @default(uuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -86,6 +86,12 @@ model Request {
   questionnaire   Questionnaire @relation(fields: [questionnaireId], references: [id])
 
   answers QuestionAnswer[]
+
+  businessOwner String
+
+  title       String
+
+  summary     String
 
   @@map("requests")
 }
@@ -98,7 +104,7 @@ model QuestionAnswer {
   userId Int
   user User @relation(fields: [userId], references: [id])
 
-  requestId Int
+  requestId String
   request   Request @relation(fields: [requestId], references: [id])
 
   questionId Int

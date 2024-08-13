@@ -52,7 +52,7 @@ export class RequestController {
 
   @Get(':id')
   getRequestById(
-    @Param('id', ParseIntPipe) requestId: number,
+    @Param('id', ParseIntPipe) requestId: string,
   ) {
     return this.requestService.getRequestById(
       requestId,
