@@ -1,34 +1,34 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
 
 import { be_base_url } from "../../utils/consts"
-import { prepareHeaders } from '../../utils/apiUtils'
+import { prepareHeaders } from "../../utils/apiUtils"
 
 export const requestsAPI = createApi({
-  reducerPath: 'requestsAPI',
+  reducerPath: "requestsAPI",
   baseQuery: fetchBaseQuery({
     baseUrl: be_base_url,
-    prepareHeaders
+    prepareHeaders,
   }),
-  endpoints: (builder) => ({
+  endpoints: builder => ({
     getRequests: builder.query({
       query: () => ({
-        url: 'requests',
-        method: 'GET',
+        url: "requests",
+        method: "GET",
         headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        }
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
       }),
     }),
     createRequest: builder.mutation({
-      query: (body) => ({
-        url: 'requests',
-        method: 'POST',
+      query: body => ({
+        url: "requests",
+        method: "POST",
         body,
         headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        }
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
       }),
     }),
   }),

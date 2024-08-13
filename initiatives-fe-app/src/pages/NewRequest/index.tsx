@@ -37,7 +37,7 @@ export const NewRequest = () => {
   const [summary, setSummary] = useState("")
   const [openNotification, setOpenNotification] = useState(false)
   const [isSaved, setIsSaved] = useState(false)
-  
+
   useEffect(() => {
     if (isError || isSuccess) {
       setOpenNotification(true)
@@ -76,39 +76,30 @@ export const NewRequest = () => {
         autoHideDuration={1000}
         anchorOrigin={{ vertical: "top", horizontal: "center" }}
         onClose={(_e, reason) => {
-          if (reason === 'clickaway') {
-            return;
+          if (reason === "clickaway") {
+            return
           }
           if (isSaved) {
-            navigate("/");
+            navigate("/")
           } else {
-            navigate("/request/" + data?.id);
+            navigate("/request/" + data?.id)
           }
-      
-          setOpenNotification(false);
+
+          setOpenNotification(false)
         }}
       >
         {
           isSuccess ? (
-            <Alert
-              severity="success"
-              variant="filled"
-              sx={{ width: "100%" }}
-            >
-              Request has been {isSaved ? 'saved' : 'created'} successfully!
-              {
-                isSaved && "You will be redirected to the home page, shortly." 
-              }
+            <Alert severity="success" variant="filled" sx={{ width: "100%" }}>
+              Request has been {isSaved ? "saved" : "created"} successfully!
+              {isSaved && "You will be redirected to the home page, shortly."}
             </Alert>
           ) : isError ? (
-            <Alert
-              severity="error"
-              variant="filled"
-              sx={{ width: "100%" }}
-            >
+            <Alert severity="error" variant="filled" sx={{ width: "100%" }}>
               Sorry, something went wrong: <br />
               Status: {(error as FetchBaseQueryError)?.status} <br />
-              Error message: {JSON.stringify((error as FetchBaseQueryError)?.data as any)}
+              Error message:{" "}
+              {JSON.stringify((error as FetchBaseQueryError)?.data as any)}
             </Alert>
           ) : undefined // This code needs propper wrapper, I think. Something like global toast with custom messages
         }
@@ -190,11 +181,7 @@ export const NewRequest = () => {
           >
             Cancel
           </Button>
-          <Button 
-           type="submit"
-            variant="contained"
-            data-no-navigate={true}
-          >
+          <Button type="submit" variant="contained" data-no-navigate={true}>
             Save
           </Button>
           <Button type="submit" variant="contained" sx={{ marginLeft: "auto" }}>

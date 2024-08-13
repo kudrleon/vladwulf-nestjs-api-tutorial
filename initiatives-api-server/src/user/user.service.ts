@@ -23,6 +23,7 @@ export class UserService {
 
     return user;
   }
+
   retrieveUserById(id: string) {
     const parsedId = parseInt(id, 10);
     if (isNaN(parsedId)) {

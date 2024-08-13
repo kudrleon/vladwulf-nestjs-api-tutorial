@@ -46,6 +46,7 @@ List of services with env variables to configure your instance:
 - initiatives-dev-api - this will start be 
   - prisma studio is running on port 5555
   - in dev mode api is on /api/ route
+  
   | Variable name       |              Description               | Default value |
   |---------------------|----------------------------------------|---------------|
   | `DATABASE_HOST`     | hostname of postgres                   | `dev-db`      |
@@ -66,3 +67,15 @@ List of services with env variables to configure your instance:
   | `BE_API_HOST`       | url where BE is hosted                 | `localhost    |
   | `FE_PORT`           | Port on which to run dev client        | `3000`        |   
   | ⬆ Warn: this *WILL* change both exposed port and port of FE inside container|
+
+## All default ports and services
+
+Frontend [http://localhost:3000](localhost:3000)
+
+Backend  [localhost:8080](localhost:8080)
+
+Swagger  [localhost:8080/api](localhost:8080/api)
+
+Prisma Studio  [localhost:5555](localhost:5555)
+
+Dev postgresql [localhost:5432](localhost:5432) username postgres password 123
