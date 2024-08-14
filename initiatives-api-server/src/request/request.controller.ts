@@ -17,19 +17,23 @@ import {
   CreateRequestDto,
   EditRequestDto,
 } from './dto';
+import { QuestionAnswerService } from 'src/question-answer/question-answer.service';
 
 @UseGuards(JwtGuard)
 @Controller('requests')
 export class RequestController {
   constructor(
     private readonly requestService: RequestService,
+    // private readonly questionAnswerService: QuestionAnswerService,
   ) {}
 
   @Post()
-  create(
+  async create(
     @GetUser('id') userId: number,
     @Body() createRequestDto: CreateRequestDto,
   ) {
+    // For now we will have first created questionnaire as default
+    // const questionnaire = await this.questionAnswerService.getOldestQuestionAnswer()
     return this.requestService.create(
       userId,
       createRequestDto,
@@ -52,7 +56,7 @@ export class RequestController {
 
   @Get(':id')
   getRequestById(
-    @Param('id', ParseIntPipe) requestId: string,
+    @Param('id', ParseIntPipe) requestId: number,
   ) {
     return this.requestService.getRequestById(
       requestId,

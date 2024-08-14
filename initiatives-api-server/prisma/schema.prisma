@@ -24,6 +24,7 @@ model User {
 
   requests Request[]
   questionAnswers QuestionAnswer[]
+  questionnaires Questionnaire[]
 
   @@map("users")
 }
@@ -35,6 +36,9 @@ model Questionnaire {
 
   title       String
   description String?
+
+  createdBy Int?
+  user User? @relation(fields: [createdBy], references: [id])
 
   sections QuestionnaireSection[]
 
@@ -75,7 +79,7 @@ model Question {
 }
 
 model Request {
-  id        String      @id @default(uuid())
+  id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -104,7 +108,7 @@ model QuestionAnswer {
   userId Int
   user User @relation(fields: [userId], references: [id])
 
-  requestId String
+  requestId Int
   request   Request @relation(fields: [requestId], references: [id])
 
   questionId Int

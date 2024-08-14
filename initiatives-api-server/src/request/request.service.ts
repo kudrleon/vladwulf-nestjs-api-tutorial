@@ -26,7 +26,7 @@ export class RequestService {
     return this.prisma.request.findMany();
   }
 
-  getRequestById(id: string) {
+  getRequestById(id: number) {
     return this.prisma.request.findFirst({
       where: {
         id,
