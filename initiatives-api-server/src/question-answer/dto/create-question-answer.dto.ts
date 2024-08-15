@@ -16,8 +16,4 @@ export class CreateQuestionAnswerDto {
   @IsString()
   @IsNotEmpty()
   answer: string;
-
-  @IsNumber()
-  @IsNotEmpty()
-  userId: number;
 }

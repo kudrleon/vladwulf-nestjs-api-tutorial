@@ -23,6 +23,7 @@ export default function RoutesMap() {
             <Route path="/" element={<Home />} />
             <Route path="/new-request" element={<Request />} />
             <Route path="/request/:id" element={<Request />} />
+            <Route path="/request/:id/:step" element={<Request />} />
           </Route>
           <Route path="/first-login" element={<FirstLogin />} />
         </Route>

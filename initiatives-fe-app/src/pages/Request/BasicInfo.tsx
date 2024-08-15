@@ -1,4 +1,13 @@
-import { Alert, Button, Card, CardActions, LinearProgress, Snackbar, TextField, Typography } from "@mui/material"
+import {
+  Alert,
+  Button,
+  Card,
+  CardActions,
+  LinearProgress,
+  Snackbar,
+  TextField,
+  Typography,
+} from "@mui/material"
 import {
   useCreateRequestMutation,
   useLazyGetRequestsQuery,
@@ -7,11 +16,18 @@ import {
 import { useEffect, useState } from "react"
 
 import type { FetchBaseQueryError } from "@reduxjs/toolkit/query"
+import { calculateProgress } from "../../utils/calculateProgress"
 import { selectUser } from "../../features/auth/authSlice"
 import { useAppSelector } from "../../app/hooks"
 import { useNavigate } from "react-router-dom"
 
-export const BasicInfo = ({ id, setBasicInfoProgress, request }: { id?: number, setBasicInfoProgress: (progressValue: number) => void, request: any }) => {
+type props = {
+  id?: number
+  setBasicInfoProgress: (progressValue: number) => void
+  request: any
+}
+
+export const BasicInfo = ({ id, setBasicInfoProgress, request }: props) => {
   const [
     trigger,
     {
@@ -38,7 +54,7 @@ export const BasicInfo = ({ id, setBasicInfoProgress, request }: { id?: number, 
 
   const user = useAppSelector(selectUser)
   const navigate = useNavigate()
-  
+
   const [openNotification, setOpenNotification] = useState(false)
 
   useEffect(() => {
@@ -49,28 +65,39 @@ export const BasicInfo = ({ id, setBasicInfoProgress, request }: { id?: number, 
     }
   }, [request])
 
-
-  const progressValue = ([MLProjectTitle, businessOwner, summary] as string[]).reduce((acc: number, val: string) => {
-    if (val) {
-      acc += 1
-    }
-    return acc
-  }, 0) / 3 * 100;
-  setBasicInfoProgress(Math.round(progressValue));
-
+  const progressValue = calculateProgress(
+    [{
+      question: "ML project title",
+      answer: MLProjectTitle
+    },
+    {
+      question: "Who is business owner/unit of this solution?",
+      answer: businessOwner
+    },
+    {
+      question: "Please provide a short summary of this project",
+      answer: summary
+    }].map(({question, answer}, index) => ({
+      id: -1,
+      question,
+      order: index,
+      questionAnswers: [{
+        requestId: -1,
+        userId: -1,
+        questionId: -1,
+        answer,
+        id: -1
+      }]
+    }))
+  )
+  setBasicInfoProgress(Math.round(progressValue))
   const isLoading = createIsLoading || updateIsLoading
   const isSuccess = createIsSuccess || updateIsSuccess
   const isError = createIsError || updateIsError
   const error = createError || updateError
-  const shouldShowNotification =
-    createIsError ||
-    createIsSuccess ||
-    createIsLoading ||
-    updateIsError ||
-    updateIsLoading ||
-    updateIsSuccess
+  const shouldShowNotification = isSuccess || isError
   useEffect(() => {
-    if (createIsError || createIsSuccess) {
+      if (isError || isLoading) {
       setOpenNotification(true)
     }
   }, [shouldShowNotification])
@@ -80,42 +107,43 @@ export const BasicInfo = ({ id, setBasicInfoProgress, request }: { id?: number, 
       open={openNotification}
       autoHideDuration={1000}
       anchorOrigin={{ vertical: "top", horizontal: "center" }}
-      onClose={(_e, reason) => {
-        if (reason === "clickaway") {
-          return
-        }
-        if (isSaved) {
-          navigate("/")
-        } else {
-          if (!id) {
-            navigate("/request/" + createData?.id)
-          }
-        }
-
-        setOpenNotification(false)
-      }}
     >
       {
         isLoading ? (
-          <LinearProgress sx={{ width: "100%" }} />
-        ) : isSuccess ? (
-          <Alert severity="success" variant="filled" sx={{ width: "100%" }}>
-            Request has been {isSaved ? "saved" : "created"} successfully!
-            {isSaved && "You will be redirected to the home page, shortly."}
-          </Alert>
-        ) : createIsError ? (
-          <Alert severity="error" variant="filled" sx={{ width: "100%" }}>
-            Sorry, something went wrong: <br />
+            <Alert
+              severity="warning"
+              variant="filled"
+              sx={{ width: "100%" }}
+            >
+            <p>"Updating"</p>
+            </Alert>
+        ) : isError ? (
+          <Alert
+            severity="error"
+            variant="filled"
+            sx={{ width: "100%" }}
+            onClose={_e => {
+              if (isSaved) {
+                navigate("/")
+              } else {
+                if (!id) {
+                  navigate("/request/" + createData?.id + "/2")
+                }
+              }
+            }}
+          >
+            {updateIsError ? (
+              <p>
+                Failed to update field: <br />
+              </p>
+            ) : (
+              <p>
+                Failed to create request: <br />
+              </p>
+            )}
             Status: {(error as FetchBaseQueryError)?.status} <br />
             Error message:{" "}
             {JSON.stringify((error as FetchBaseQueryError)?.data as any)}
-          </Alert>
-        ) : updateIsError ? (
-          <Alert severity="error" variant="filled" sx={{ width: "100%" }}>
-            Failed to update field: <br />
-            Status: {(updateError as FetchBaseQueryError)?.status} <br />
-            Error message:{" "}
-            {JSON.stringify((updateError as FetchBaseQueryError)?.data as any)}
           </Alert>
         ) : undefined // This code needs propper wrapper, I think. Something like global toast with custom messages
       }
@@ -140,7 +168,10 @@ export const BasicInfo = ({ id, setBasicInfoProgress, request }: { id?: number, 
         }
         if ((e.nativeEvent as SubmitEvent).submitter?.dataset.noNavigate) {
           setIsSaved(true)
+          navigate("/")
+          return
         }
+        navigate("/request/" + id + "/2")
       }}
       sx={{
         maxWidth: "800px",

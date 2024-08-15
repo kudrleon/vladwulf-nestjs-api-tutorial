@@ -88,7 +88,10 @@ export class RequestService {
     id: number,
     updateRequestDto: EditRequestDto,
   ) {
-    return `This action updates a #${id} request`;
+    return {
+      message: `This action updates a #${id} request`,
+      status: 204
+    };
   }
 
   remove(id: number) {

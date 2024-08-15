@@ -3,12 +3,13 @@ import { combineSlices, configureStore } from "@reduxjs/toolkit"
 
 import { authInterceptor } from "../services/authInterceptor"
 import { authSlice } from "../features/auth/authSlice"
+import { questionAnswerAPI } from "../features/questionAnswer/questionAnswerAPISlice"
 import { requestsAPI } from "../features/requests/requestsAPISlice"
 import { setupListeners } from "@reduxjs/toolkit/query"
 import { signUpSlice } from "../features/signup/signUpSlice"
 import { usersAPI } from "../features/auth/usersAPISlice"
 
-const rootReducer = combineSlices(authSlice, signUpSlice, requestsAPI, usersAPI)
+const rootReducer = combineSlices(authSlice, signUpSlice, requestsAPI, usersAPI, questionAnswerAPI)
 
 export type RootState = ReturnType<typeof rootReducer>
 
@@ -20,6 +21,7 @@ export const makeStore = (preloadedState?: Partial<RootState>) => {
         authInterceptor,
         requestsAPI.middleware,
         usersAPI.middleware,
+        questionAnswerAPI.middleware,
       ]),
     preloadedState,
   })
