@@ -53,7 +53,7 @@ export class RequestController {
   }
 
   @Get('template')
-  getTemplateRequest() {
+  getRequestTemplate() {
     return this.requestService.getRequestTemplate();
   }
 
