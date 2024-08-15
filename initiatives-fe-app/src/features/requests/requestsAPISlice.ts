@@ -31,7 +31,23 @@ export const requestsAPI = createApi({
         },
       }),
     }),
+    updateRequest: builder.mutation({
+      query: ({ id, ...body }) => ({
+        url: `requests/${id}`,
+        method: "PATCH",
+        body,
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      }),
+    }),
   }),
 })
 
-export const { useGetRequestsQuery, useCreateRequestMutation } = requestsAPI
+export const {
+  useGetRequestsQuery,
+  useLazyGetRequestsQuery,
+  useCreateRequestMutation,
+  useUpdateRequestMutation,
+} = requestsAPI

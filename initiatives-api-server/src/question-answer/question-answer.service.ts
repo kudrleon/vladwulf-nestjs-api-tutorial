@@ -1,7 +1,7 @@
-import { Injectable } from '@nestjs/common';
 import { CreateQuestionAnswerDto } from './dto/create-question-answer.dto';
-import { UpdateQuestionAnswerDto } from './dto/update-question-answer.dto';
+import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
+import { UpdateQuestionAnswerDto } from './dto/update-question-answer.dto';
 
 @Injectable()
 export class QuestionAnswerService {
@@ -32,7 +32,7 @@ export class QuestionAnswerService {
       },
     });
   }
-
+  
   remove(id: number) {
     return `This action removes a #${id} questionAnswer`;
   }

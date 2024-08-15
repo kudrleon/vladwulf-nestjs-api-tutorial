@@ -5,9 +5,9 @@ import {
 } from 'class-validator';
 
 export class CreateQuestionAnswerDto {
-  @IsString()
+  @IsNumber()
   @IsNotEmpty()
-  requestId: string;
+  requestId: number;
 
   @IsNumber()
   @IsNotEmpty()

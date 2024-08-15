@@ -1,4 +1,4 @@
-import { AppBar, Box, Toolbar, Typography } from "@mui/material"
+import { AppBar, Box, LinearProgress, Toolbar, Typography } from "@mui/material"
 import { Navigate, Outlet } from "react-router-dom"
 
 import { setUser } from "../../features/auth/authSlice"
@@ -15,6 +15,9 @@ export const LoggedInLayout = () => {
   useEffect(() => {
     if(data) dispatch(setUser(data))
   }, [data])
+  if(isFetching) {
+    return <LinearProgress />
+  }
   if (data && (data.firstName === null || data.lastName === null)) {
     return <Navigate to="/first-login" />
   }

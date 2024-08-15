@@ -27,17 +27,19 @@ model User {
   questionnaires Questionnaire[]
 
   @@map("users")
+  Question Question[]
+  QuestionnaireSection QuestionnaireSection[]
 }
 
 model Questionnaire {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  createdBy Int?
 
   title       String
   description String?
 
-  createdBy Int?
   user User? @relation(fields: [createdBy], references: [id])
 
   sections QuestionnaireSection[]
@@ -51,6 +53,9 @@ model QuestionnaireSection {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  createdBy Int?
+  user User? @relation(fields: [createdBy], references: [id])
 
   title       String
   description String?
@@ -68,6 +73,9 @@ model Question {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  createdBy Int?
+  user User? @relation(fields: [createdBy], references: [id])
+
   question String
 
   questionnaireSectionId Int
@@ -75,6 +83,9 @@ model Question {
 
   questionAnswers QuestionAnswer[]
 
+  order Int
+  @@unique([questionnaireSectionId, order], name: "question_order_unique_per_section")
+  
   @@map("questions")
 }
 

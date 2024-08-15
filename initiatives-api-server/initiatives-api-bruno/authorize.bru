@@ -1,0 +1,22 @@
+meta {
+  name: authorize
+  type: http
+  seq: 2
+}
+
+post {
+  url: http://{{BE_BASE_URL}}/auth/signin
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "email": "{{USERNAME}}",
+    "password": "{{PASSWORD}}"
+  }
+}
+
+script:post-response {
+  bru.setEnvVar("AUTH_TOKEN", res.body.access_token);
+}

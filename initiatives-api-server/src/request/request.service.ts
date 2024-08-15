@@ -5,6 +5,7 @@ import {
 
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
+import { defaultQuestionnaireId } from 'src/utils/consts';
 
 @Injectable()
 export class RequestService {
@@ -18,6 +19,7 @@ export class RequestService {
       data: {
         userId,
         ...createRequestDto,
+        questionnaireId: defaultQuestionnaireId,
       },
     });
   }
@@ -30,21 +32,6 @@ export class RequestService {
     return this.prisma.request.findFirst({
       where: {
         id,
-      },
-      include: {
-        questionnaire: {
-          include: {
-            sections: {
-              include: {
-                questions: {
-                  include: {
-                    questionAnswers: true,
-                  },
-                },
-              },
-            },
-          },
-        },
       },
     });
   }
