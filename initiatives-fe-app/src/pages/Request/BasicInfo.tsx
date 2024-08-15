@@ -11,7 +11,7 @@ import { selectUser } from "../../features/auth/authSlice"
 import { useAppSelector } from "../../app/hooks"
 import { useNavigate } from "react-router-dom"
 
-export const BasicInfo = ({ id }: { id: number }) => {
+export const BasicInfo = ({ id, setBasicInfoProgress, request }: { id?: number, setBasicInfoProgress: (progressValue: number) => void, request: any }) => {
   const [
     trigger,
     {
@@ -31,7 +31,6 @@ export const BasicInfo = ({ id }: { id: number }) => {
       isSuccess: updateIsSuccess,
     },
   ] = useUpdateRequestMutation()
-  const [getRequest, { data: requestData }] = useLazyGetRequestsQuery()
   const [MLProjectTitle, setMLProjectTitle] = useState("")
   const [businessOwner, setBusinessOwner] = useState("")
   const [summary, setSummary] = useState("")
@@ -43,18 +42,21 @@ export const BasicInfo = ({ id }: { id: number }) => {
   const [openNotification, setOpenNotification] = useState(false)
 
   useEffect(() => {
-    if (id) {
-      getRequest(id)
+    if (request) {
+      setMLProjectTitle(request.title)
+      setBusinessOwner(request.businessOwner)
+      setSummary(request.summary)
     }
-  }, [id])
-  useEffect(() => {
-    console.log(requestData)
-    if (requestData) {
-      setMLProjectTitle(requestData.title)
-      setBusinessOwner(requestData.businessOwner)
-      setSummary(requestData.summary)
+  }, [request])
+
+
+  const progressValue = ([MLProjectTitle, businessOwner, summary] as string[]).reduce((acc: number, val: string) => {
+    if (val) {
+      acc += 1
     }
-  }, [requestData])
+    return acc
+  }, 0) / 3 * 100;
+  setBasicInfoProgress(Math.round(progressValue));
 
   const isLoading = createIsLoading || updateIsLoading
   const isSuccess = createIsSuccess || updateIsSuccess

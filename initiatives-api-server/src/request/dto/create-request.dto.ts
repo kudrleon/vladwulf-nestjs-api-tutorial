@@ -6,6 +6,7 @@ import {
 } from 'class-validator';
 
 import { ApiProperty } from '@nestjs/swagger';
+import { defaultQuestionnaireId } from 'src/utils/consts';
 
 export class CreateRequestDto {
   @ApiProperty()
@@ -27,4 +28,12 @@ export class CreateRequestDto {
   @IsString()
   @IsNotEmpty()
   summary: string
+
+  constructor(partial: Partial<CreateRequestDto>) {
+    Object.assign(this, partial);
+    this.questionnaireId = defaultQuestionnaireId;
+    this.businessOwner = partial.businessOwner || '';
+    this.title = partial.title || '';
+    this.summary = partial.summary || '';
+  }
 }

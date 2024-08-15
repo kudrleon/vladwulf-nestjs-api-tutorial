@@ -1,0 +1,15 @@
+meta {
+  name: Get template
+  type: http
+  seq: 1
+}
+
+get {
+  url: http://{{BE_BASE_URL}}/requests/template
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{AUTH_TOKEN}}
+}

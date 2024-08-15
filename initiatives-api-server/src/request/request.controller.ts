@@ -54,6 +54,11 @@ export class RequestController {
     return this.requestService.getRequests();
   }
 
+  @Get('template')
+  getTemplateRequest() {
+    return this.requestService.getRequestTemplate();
+  }
+
   @Get(':id')
   getRequestById(
     @Param('id', ParseIntPipe) requestId: number,
