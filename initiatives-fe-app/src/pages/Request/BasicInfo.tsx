@@ -3,15 +3,13 @@ import {
   Button,
   Card,
   CardActions,
-  LinearProgress,
   Snackbar,
   TextField,
-  Typography,
+  Typography
 } from "@mui/material"
 import {
   useCreateRequestMutation,
-  useLazyGetRequestsQuery,
-  useUpdateRequestMutation,
+  useUpdateRequestMutation
 } from "../../features/requests/requestsAPISlice"
 import { useEffect, useState } from "react"
 
@@ -66,29 +64,33 @@ export const BasicInfo = ({ id, setBasicInfoProgress, request }: props) => {
   }, [request])
 
   const progressValue = calculateProgress(
-    [{
-      question: "ML project title",
-      answer: MLProjectTitle
-    },
-    {
-      question: "Who is business owner/unit of this solution?",
-      answer: businessOwner
-    },
-    {
-      question: "Please provide a short summary of this project",
-      answer: summary
-    }].map(({question, answer}, index) => ({
+    [
+      {
+        question: "ML project title",
+        answer: MLProjectTitle,
+      },
+      {
+        question: "Who is business owner/unit of this solution?",
+        answer: businessOwner,
+      },
+      {
+        question: "Please provide a short summary of this project",
+        answer: summary,
+      },
+    ].map(({ question, answer }, index) => ({
       id: -1,
       question,
       order: index,
-      questionAnswers: [{
-        requestId: -1,
-        userId: -1,
-        questionId: -1,
-        answer,
-        id: -1
-      }]
-    }))
+      questionAnswers: [
+        {
+          requestId: -1,
+          userId: -1,
+          questionId: -1,
+          answer,
+          id: -1,
+        },
+      ],
+    })),
   )
   setBasicInfoProgress(Math.round(progressValue))
   const isLoading = createIsLoading || updateIsLoading
@@ -97,7 +99,7 @@ export const BasicInfo = ({ id, setBasicInfoProgress, request }: props) => {
   const error = createError || updateError
   const shouldShowNotification = isSuccess || isError
   useEffect(() => {
-      if (isError || isLoading) {
+    if (isError || isLoading) {
       setOpenNotification(true)
     }
   }, [shouldShowNotification])
@@ -110,13 +112,9 @@ export const BasicInfo = ({ id, setBasicInfoProgress, request }: props) => {
     >
       {
         isLoading ? (
-            <Alert
-              severity="warning"
-              variant="filled"
-              sx={{ width: "100%" }}
-            >
+          <Alert severity="warning" variant="filled" sx={{ width: "100%" }}>
             <p>"Updating"</p>
-            </Alert>
+          </Alert>
         ) : isError ? (
           <Alert
             severity="error"

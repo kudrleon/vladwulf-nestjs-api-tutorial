@@ -42,7 +42,7 @@ export class RequestService {
                   questionAnswers: {
                     where: {
                       requestId: -1,
-                    }
+                    },
                   },
                 },
               },

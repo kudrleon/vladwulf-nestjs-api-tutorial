@@ -2,7 +2,6 @@ import "./index.scss"
 
 import {
   Box,
-  Button,
   CircularProgress,
   Divider,
   Drawer,
@@ -13,13 +12,10 @@ import {
   ListItemIcon,
   ListItemText,
   Step,
-  StepConnector,
   StepLabel,
   Stepper,
   Toolbar,
   Typography,
-  stepConnectorClasses,
-  styled,
 } from "@mui/material"
 import React, { useEffect } from "react"
 import {
@@ -124,9 +120,8 @@ export const Request = () => {
     )
   }
 
-  const isFinishDisabled = stepsProgress.some((progress) => progress !== 100)
+  const isFinishDisabled = stepsProgress.some(progress => progress !== 100)
   const handleNext = () => {
-    
     if (activeStep === steps.length - 1) {
       if (isFinishDisabled) {
         return
@@ -191,10 +186,12 @@ export const Request = () => {
                 variant="determinate"
               />
               <Typography sx={{ textAlign: "left" }}>
-                {
-                  progressStatus === 100 ? "Completed" : activeStep === index ? "In progress" : "Pending"
-                } 
-                </Typography>
+                {progressStatus === 100
+                  ? "Completed"
+                  : activeStep === index
+                    ? "In progress"
+                    : "Pending"}
+              </Typography>
             </Step>
           )
         })}

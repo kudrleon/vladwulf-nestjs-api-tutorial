@@ -7,7 +7,7 @@ import {
   ParseIntPipe,
   Patch,
   Post,
-  UseGuards
+  UseGuards,
 } from '@nestjs/common';
 import { GetUser } from '../auth/decorator';
 import { JwtGuard } from '../auth/guard';
@@ -21,9 +21,8 @@ import { RequestService } from './request.service';
 @Controller('requests')
 export class RequestController {
   constructor(
-    private readonly requestService: RequestService,
-  ) // private readonly questionAnswerService: QuestionAnswerService,
-  {}
+    private readonly requestService: RequestService, // private readonly questionAnswerService: QuestionAnswerService,
+  ) {}
 
   @Post()
   async create(
