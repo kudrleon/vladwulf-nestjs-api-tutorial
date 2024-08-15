@@ -9,14 +9,20 @@ import { setupListeners } from "@reduxjs/toolkit/query"
 import { signUpSlice } from "../features/signup/signUpSlice"
 import { usersAPI } from "../features/auth/usersAPISlice"
 
-const rootReducer = combineSlices(authSlice, signUpSlice, requestsAPI, usersAPI, questionAnswerAPI)
+const rootReducer = combineSlices(
+  authSlice,
+  signUpSlice,
+  requestsAPI,
+  usersAPI,
+  questionAnswerAPI,
+)
 
 export type RootState = ReturnType<typeof rootReducer>
 
 export const makeStore = (preloadedState?: Partial<RootState>) => {
   const store = configureStore({
     reducer: rootReducer,
-    middleware: (getDefaultMiddleware) =>
+    middleware: getDefaultMiddleware =>
       getDefaultMiddleware().concat([
         authInterceptor,
         requestsAPI.middleware,

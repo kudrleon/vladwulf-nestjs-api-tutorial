@@ -6,7 +6,6 @@ import {
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { defaultQuestionnaireId } from 'src/utils/consts';
-import e from 'express';
 
 @Injectable()
 export class RequestService {
@@ -28,7 +27,7 @@ export class RequestService {
   getRequests() {
     return this.prisma.request.findMany();
   }
-  
+
   async getRequestTemplate() {
     const questionnaire =
       await this.prisma.questionnaire.findFirst({
@@ -40,7 +39,11 @@ export class RequestService {
             include: {
               questions: {
                 include: {
-                  questionAnswers: true,
+                  questionAnswers: {
+                    where: {
+                      requestId: -1,
+                    }
+                  },
                 },
               },
             },
@@ -65,7 +68,11 @@ export class RequestService {
               include: {
                 questions: {
                   include: {
-                    questionAnswers: true,
+                    questionAnswers: {
+                      where: {
+                        requestId: id,
+                      },
+                    },
                   },
                 },
               },
@@ -90,7 +97,7 @@ export class RequestService {
   ) {
     return {
       message: `This action updates a #${id} request`,
-      status: 204
+      status: 204,
     };
   }
 

@@ -11,10 +11,10 @@ export const questionAnswerAPI = createApi({
   }),
   endpoints: builder => ({
     createQuestionAnswer: builder.mutation({
-      query: ({requestId, questionId, answer}) => ({
+      query: ({ requestId, questionId, answer }) => ({
         url: "",
         method: "POST",
-        body: {requestId, questionId, answer},
+        body: { requestId, questionId, answer },
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
@@ -22,7 +22,7 @@ export const questionAnswerAPI = createApi({
       }),
     }),
     updateQuestionAnswer: builder.mutation({
-      query: ({ answerId, answer}) => ({
+      query: ({ answerId, answer }) => ({
         url: "/" + answerId,
         method: "PATCH",
         body: { answer },
@@ -37,5 +37,5 @@ export const questionAnswerAPI = createApi({
 
 export const {
   useCreateQuestionAnswerMutation,
-  useUpdateQuestionAnswerMutation
+  useUpdateQuestionAnswerMutation,
 } = questionAnswerAPI

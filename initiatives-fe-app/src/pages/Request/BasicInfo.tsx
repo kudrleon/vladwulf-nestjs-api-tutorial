@@ -150,7 +150,7 @@ export const BasicInfo = ({ id, setBasicInfoProgress, request }: props) => {
     </Snackbar>,
     <Card
       component="form"
-      onSubmit={e => {
+      onSubmit={async e => {
         e.preventDefault()
         if (id) {
           updateTrigger({
@@ -160,18 +160,21 @@ export const BasicInfo = ({ id, setBasicInfoProgress, request }: props) => {
             summary,
           })
         } else {
-          trigger({
+          const requestResult = await trigger({
             title: MLProjectTitle,
             businessOwner,
             summary,
           })
+          navigate("/request/" + requestResult.data.id + "/2")
+          return
         }
         if ((e.nativeEvent as SubmitEvent).submitter?.dataset.noNavigate) {
           setIsSaved(true)
           navigate("/")
           return
+        } else {
+          navigate("/request/" + id + "/2")
         }
-        navigate("/request/" + id + "/2")
       }}
       sx={{
         maxWidth: "800px",

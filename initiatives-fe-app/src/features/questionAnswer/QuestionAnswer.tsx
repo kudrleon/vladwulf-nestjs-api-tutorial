@@ -1,5 +1,13 @@
-import { Box, CircularProgress, IconButton, InputAdornment, TextField, Tooltip, Typography } from "@mui/material"
-import { Check as CheckIcon, Warning as WarningIcon } from '@mui/icons-material';
+import {
+  Box,
+  CircularProgress,
+  IconButton,
+  InputAdornment,
+  TextField,
+  Tooltip,
+  Typography,
+} from "@mui/material"
+import { Check as CheckIcon, Warning as WarningIcon } from "@mui/icons-material"
 import {
   useCreateQuestionAnswerMutation,
   useUpdateQuestionAnswerMutation,
@@ -20,7 +28,7 @@ export const QuestionAnswer = ({
   requestId,
   questionAnswer,
   id,
-  questionId
+  questionId,
 }: props) => {
   const [answer, setAnswer] = useState(questionAnswer)
   const [
@@ -45,7 +53,7 @@ export const QuestionAnswer = ({
   const isError = updateErrored || createErrored
   const error = updateError || createError
   const isLoading = updateIsLoading || createIsLoading
-  
+
   return (
     <Box sx={{ width: "100%" }} display={"block"}>
       <Typography sx={{ textAlign: "left" }}>{question}</Typography>
@@ -62,20 +70,19 @@ export const QuestionAnswer = ({
         }}
         disabled={isLoading}
         InputProps={{
-          endAdornment: <InputAdornment position="end">
-            <Tooltip title={isError ? (error as any)?.message?.join('\n') : ""}>
-              <IconButton
-                edge="end"
-                disabled={!isError}
-                disableRipple
-                
+          endAdornment: (
+            <InputAdornment position="end">
+              <Tooltip
+                title={isError ? (error as any)?.message?.join("\n") : ""}
               >
-                {isLoading && <CircularProgress size={20} />}
-                {isSuccess && <CheckIcon color="success" />}
-                {isError && <WarningIcon color="error" />}
-              </IconButton>
-            </Tooltip>
-          </InputAdornment>,
+                <IconButton edge="end" disabled={!isError} disableRipple>
+                  {isLoading && <CircularProgress size={20} />}
+                  {isSuccess && <CheckIcon color="success" />}
+                  {isError && <WarningIcon color="error" />}
+                </IconButton>
+              </Tooltip>
+            </InputAdornment>
+          ),
         }}
       />
     </Box>

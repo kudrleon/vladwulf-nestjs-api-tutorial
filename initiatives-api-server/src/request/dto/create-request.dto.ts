@@ -13,12 +13,12 @@ export class CreateRequestDto {
   @IsNumber()
   @IsOptional()
   questionnaireId: number;
-  
+
   @ApiProperty()
   @IsString()
   @IsNotEmpty()
   businessOwner: string;
-  
+
   @ApiProperty()
   @IsString()
   @IsNotEmpty()
@@ -27,13 +27,16 @@ export class CreateRequestDto {
   @ApiProperty()
   @IsString()
   @IsNotEmpty()
-  summary: string
+  summary: string;
 
-  constructor(partial: Partial<CreateRequestDto>) {
+  constructor(
+    partial: Partial<CreateRequestDto>,
+  ) {
     Object.assign(this, partial);
     this.questionnaireId = defaultQuestionnaireId;
-    this.businessOwner = partial.businessOwner || '';
-    this.title = partial.title || '';
-    this.summary = partial.summary || '';
+    this.businessOwner =
+      partial?.businessOwner || '';
+    this.title = partial?.title || '';
+    this.summary = partial?.summary || '';
   }
 }
