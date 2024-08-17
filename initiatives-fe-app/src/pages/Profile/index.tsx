@@ -9,16 +9,21 @@ import {
   Typography,
 } from "@mui/material"
 import React, { useEffect } from "react"
+import { useGetCurrentUserProfileQuery, useUpdateCurrentUserProfileMutation } from "../../features/auth/usersAPISlice"
 
 import type { FetchBaseQueryError } from "@reduxjs/toolkit/query/react"
 import { useNavigate } from "react-router-dom"
-import { useUpdateCurrentUserProfileMutation } from "../../features/auth/usersAPISlice"
 
-export const FirstLogin = () => {
-  const [firstName, setFirstName] = React.useState("")
-  const [lastName, setLastName] = React.useState("")
+export const Profile = () => {
   const [trigger, { isLoading, isSuccess, isError, error }] =
     useUpdateCurrentUserProfileMutation()
+
+  const { data, isFetching } = useGetCurrentUserProfileQuery("userDetails", {
+    // perform a refetch every 5mins
+    pollingInterval: 300000,
+  })
+  const [firstName, setFirstName] = React.useState(data?.firstName ?? "")
+  const [lastName, setLastName] = React.useState(data?.lastName ?? "")
   const [open, setOpen] = React.useState(false)
   const navigate = useNavigate()
   useEffect(() => {
@@ -39,12 +44,12 @@ export const FirstLogin = () => {
       <Snackbar
         open={open}
         autoHideDuration={1000}
-        onClose={() => navigate("/")}
+        onClose={() => window.location.href = "/"}
         anchorOrigin={{ vertical: "top", horizontal: "center" }}
       >
         {isSuccess ? (
           <Alert
-            onClose={() => navigate("/")}
+            onClose={() => window.location.href = "/"}
             severity="success"
             variant="filled"
             sx={{ width: "100%" }}
@@ -54,7 +59,7 @@ export const FirstLogin = () => {
           </Alert>
         ) : isError ? (
           <Alert
-            onClose={() => navigate("/")}
+            onClose={() => window.location.href = "/"}
             severity="error"
             variant="filled"
             sx={{ width: "100%" }}
@@ -65,10 +70,11 @@ export const FirstLogin = () => {
           </Alert>
         ) : undefined}
       </Snackbar>
-      <Typography variant="h2">We welcoming you on our platform</Typography>
       <Typography>
-        {" "}
-        In order to proceed using site please feel in following information
+        User profile page
+      </Typography>
+      <Typography>
+        Please fill in your first and last name
       </Typography>
       <Card
         component="form"

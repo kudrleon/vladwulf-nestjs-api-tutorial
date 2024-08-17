@@ -75,7 +75,7 @@ services:
       dockerfile: Dockerfile.dev.tests
     volumes:
       - ./initiatives-api-server:/app
-      - ignore-api-test-node_modules:/app/node_modules/
+      - ignore-be-node_modules:/app/node_modules/
     environment:
         <<: [*db-variables, *jwt-variables, *be-variables]
         NODE_ENV: development
@@ -104,6 +104,5 @@ services:
 volumes:
   ignore-be-node_modules:
   ignore-fe-node_modules:
-  ignore-api-test-node_modules:
 networks:
   dev-network:

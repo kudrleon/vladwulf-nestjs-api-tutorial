@@ -1,7 +1,8 @@
-import { getValueFromLS, saveValueToLS } from '../../utils/saveValueToLS';
+import { deleteValueFromLS, getValueFromLS, saveValueToLS } from '../../utils/saveValueToLS';
 
 import type { PayloadAction } from "@reduxjs/toolkit"
 import { createAppSlice } from "../../app/createAppSlice"
+import { log } from 'console';
 import { login } from './authAPI';
 
 export interface AuthSliceState {
@@ -12,12 +13,13 @@ export interface AuthSliceState {
     firstName: string,
     lastName: string,
     email: string,
-  }
+  } | {}
 }
 
 const initialState: AuthSliceState = {
   token: getValueFromLS('token', null),
   loginFailed: null,
+  user: {}
 }
 
 export const authSlice = createAppSlice({
@@ -54,6 +56,11 @@ export const authSlice = createAppSlice({
     setUser : create.reducer((state, action: PayloadAction<{ id: string, firstName: string, lastName: string, email: string }>) => {
       state.user = action.payload;
     }),
+    logout: create.reducer((state) => {
+      state.token = null;
+      state.user = {};
+      deleteValueFromLS('token');
+    }),
   }),
   // You can define your selectors here. These selectors receive the slice
   // state as their first argument.
@@ -65,7 +72,7 @@ export const authSlice = createAppSlice({
 })
 
 // Action creators are generated for each case reducer function.
-export const { receiveToken, setUser } =
+export const { receiveToken, setUser, logout } =
   authSlice.actions
 
 // Selectors returned by `slice.selectors` take the root state as their first argument.

@@ -155,6 +155,12 @@ export const Request = () => {
               </ListItemIcon>
               <ListItemText
                 primary={"Create a request"} // I think no action - you are already here
+                onClick={() => {
+                  if (activeStep !== 0) {
+                    navigate(`/new-request`)
+                  }
+                }}
+                aria-disabled={activeStep === 0}
               />
             </ListItemButton>
           </ListItem>
