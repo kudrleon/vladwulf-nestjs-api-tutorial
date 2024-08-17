@@ -1,0 +1,12 @@
+FROM node:20-slim
+
+WORKDIR /app
+
+RUN apt-get update && apt-get --assume-yes install -y git
+
+COPY ./ ./
+COPY .git ./.git
+
+RUN yarn install --frozen-lockfile
+
+CMD ["yarn", "test:e2e:watch"]

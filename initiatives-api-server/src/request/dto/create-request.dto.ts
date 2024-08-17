@@ -6,7 +6,7 @@ import {
 } from 'class-validator';
 
 import { ApiProperty } from '@nestjs/swagger';
-import { defaultQuestionnaireId } from 'src/utils/consts';
+import { defaultQuestionnaireId } from '../../utils/consts';
 
 export class CreateRequestDto {
   @ApiProperty()

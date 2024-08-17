@@ -1,16 +1,18 @@
+import * as pactum from 'pactum';
+
 import {
   BadRequestException,
   INestApplication,
   ValidationPipe,
 } from '@nestjs/common';
-import { Test } from '@nestjs/testing';
-import * as pactum from 'pactum';
+
 import { AppModule } from '../src/app.module';
 import { AuthDto } from '../src/auth/dto';
-import { PrismaService } from '../src/prisma/prisma.service';
-import { EditUserDto } from '../src/user/dto';
-import { CreateRequestDto } from 'src/request/dto';
 import { CreateQuestionAnswerDto } from 'src/question-answer/dto/create-question-answer.dto';
+import { CreateRequestDto } from 'src/request/dto';
+import { EditUserDto } from '../src/user/dto';
+import { PrismaService } from '../src/prisma/prisma.service';
+import { Test } from '@nestjs/testing';
 import { UpdateQuestionAnswerDto } from 'src/question-answer/dto/update-question-answer.dto';
 
 describe('App e2e Request Function', () => {
@@ -70,7 +72,7 @@ describe('App e2e Request Function', () => {
 
   describe('Auth', () => {
     const dto: AuthDto = {
-      email: 'vlad@gmail.com',
+      email: 'test@mail.com',
       password: '123',
     };
     describe('Signup', () => {
@@ -200,6 +202,9 @@ describe('App e2e Request Function', () => {
     describe('Create request', () => {
       const dto: CreateRequestDto = {
         questionnaireId: 1,
+        businessOwner: 'Someone', 
+        title: 'Some Title', 
+        summary: 'Some Summary',
       };
       it('should create request', () => {
         return pactum

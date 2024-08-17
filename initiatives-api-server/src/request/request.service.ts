@@ -5,7 +5,7 @@ import {
 
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { defaultQuestionnaireId } from 'src/utils/consts';
+import { defaultQuestionnaireId } from '../utils/consts';
 
 @Injectable()
 export class RequestService {

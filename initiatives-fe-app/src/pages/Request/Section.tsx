@@ -1,11 +1,10 @@
 import { Box, Button, Typography } from "@mui/material"
 
+import React from "react"
 import { Fragment } from "react/jsx-runtime"
 import { QuestionAnswer } from "../../features/questionAnswer/QuestionAnswer"
-import React from "react"
-import { calculateProgress } from "../../utils/calculateProgress"
 import type { question } from "../../types/question.type"
-import { useState } from "react"
+import { calculateProgress } from "../../utils/calculateProgress"
 
 type props = {
   description: string
