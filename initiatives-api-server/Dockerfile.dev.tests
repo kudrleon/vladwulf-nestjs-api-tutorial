@@ -8,5 +8,6 @@ COPY ./ ./
 COPY .git ./.git
 
 RUN yarn install --frozen-lockfile
+RUN npx prisma generate
 
 CMD ["yarn", "test:e2e:watch"]

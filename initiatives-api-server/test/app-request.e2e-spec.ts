@@ -58,9 +58,31 @@ describe('App e2e Request Function', () => {
       }
       console.error(e);
     });
-
     prisma = app.get(PrismaService);
-    await prisma.cleanDb();
+
+    await prisma.questionAnswer.deleteMany({
+      where: {
+        OR: [
+          { answer: 'Test Answer - test:e2e' },
+          {
+            answer:
+              'Test Answer - test:e2e - updated',
+          },
+        ],
+      },
+    });
+
+    await prisma.request.deleteMany({
+      where: {
+        businessOwner: 'Someone - test:e2e',
+      },
+    });
+
+    await prisma.user.deleteMany({
+      where: {
+        email: 'test@mail.com',
+      },
+    });
     pactum.request.setBaseUrl(
       `http://localhost:${port}`,
     );
@@ -166,8 +188,8 @@ describe('App e2e Request Function', () => {
     describe('Edit user', () => {
       it('should edit user', () => {
         const dto: EditUserDto = {
-          firstName: 'Vladimir',
-          email: 'vlad@codewithvlad.com',
+          firstName: 'test-name',
+          email: 'test@mail.com',
         };
         return pactum
           .spec()
@@ -202,8 +224,8 @@ describe('App e2e Request Function', () => {
     describe('Create request', () => {
       const dto: CreateRequestDto = {
         questionnaireId: 1,
-        businessOwner: 'Someone', 
-        title: 'Some Title', 
+        businessOwner: 'Someone - test:e2e',
+        title: 'Some Title',
         summary: 'Some Summary',
       };
       it('should create request', () => {
@@ -267,8 +289,9 @@ describe('App e2e Request Function', () => {
     describe('Create answer', () => {
       const dto: CreateQuestionAnswerDto = {
         questionId: 1,
-        requestId: 1,
-        answer: 'Test Answer',
+        requestId:
+          '$S{requestId}' as unknown as number,
+        answer: 'Test Answer - test:e2e',
       };
       it('should create answer', () => {
         return pactum
@@ -300,7 +323,8 @@ describe('App e2e Request Function', () => {
       it('should update answer', () => {
         const updateDto: UpdateQuestionAnswerDto =
           {
-            answer: 'Test 222',
+            answer:
+              'Test Answer - test:e2e - updated',
           };
         return pactum
           .spec()
@@ -325,35 +349,10 @@ describe('App e2e Request Function', () => {
           })
           .expectStatus(200)
           .expectBodyContains('$S{requestId}')
-          .expectBodyContains('Test 222');
-        //.expectJsonMatch({id: '$S{bookmarkId}'}) would have been the correct way of testing to prevent false positive matches with other numbers, user id etc.
+          .expectBodyContains(
+            'Test Answer - test:e2e - updated',
+          );
       });
     });
-
-    // describe('Delete bookmark by id', () => {
-    //   it('should delete bookmark', () => {
-    //     return pactum
-    //       .spec()
-    //       .delete('/bookmarks/{id}')
-    //       .withPathParams('id', '$S{bookmarkId}')
-    //       .withHeaders({
-    //         Authorization:
-    //           'Bearer $S{userAccessToken}',
-    //       })
-    //       .expectStatus(204);
-    //   });
-
-    //   it('should get empty bookmarks', () => {
-    //     return pactum
-    //       .spec()
-    //       .get('/bookmarks')
-    //       .withHeaders({
-    //         Authorization:
-    //           'Bearer $S{userAccessToken}',
-    //       })
-    //       .expectStatus(200)
-    //       .expectJsonLength(0);
-    //   });
-    // });
   });
 });

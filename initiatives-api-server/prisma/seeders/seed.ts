@@ -9,8 +9,6 @@ async function main() {
         title: 'Project Request Seed',
       },
     });
-  const questionnairesCount =
-    Math.round(Math.random() * 10) + 2;
   if (!existingQuestionnaire) {
     const questionnaire =
       await prisma.questionnaire.create({
@@ -69,49 +67,44 @@ async function main() {
       'Seed data created: with default questionnaire',
       questionnaire,
     );
-    for (
-      let i = 0;
-      i < questionnairesCount;
-      i++
-    ) {
-      const numberOfSections =
-        Math.round(Math.random() * 10) + 2;
-      const sections = new Array(numberOfSections)
-        .fill(null)
-        .map((_, index) => ({
-          title: `Section ${index + 1}`,
-          description: `Section ${
-            index + 1
-          } description`,
-          questions: {
-            create: new Array(
-              Math.round(Math.random() * 5) + 2,
-            )
-              .fill(null)
-              .map((_, index) => ({
-                question: `Question ${index + 1}`,
-                createdAt: new Date(),
-                updatedAt: new Date(),
-                order: index + 1,
-              })),
+    let i = 0;
+    const numberOfSections = 4;
+    const sections = new Array(numberOfSections)
+      .fill(null)
+      .map((_, index) => ({
+        title: `Section ${index + 1}`,
+        description: `Section ${
+          index + 1
+        } description`,
+        questions: {
+          create: new Array(
+            Math.round(Math.random() * 5) + 2,
+          )
+            .fill(null)
+            .map((_, index) => ({
+              question: `Question ${index + 1}`,
+              createdAt: new Date(),
+              updatedAt: new Date(),
+              order: index + 1,
+            })),
+        },
+      }));
+    const questionnaire2 =
+      await prisma.questionnaire.create({
+        data: {
+          title: 'Project Request Seed',
+          description: `Project Request questionnaire. Iteration ${i}`,
+          sections: {
+            create: sections,
           },
-        }));
-      const questionnaire =
-        await prisma.questionnaire.create({
-          data: {
-            title: 'Project Request Seed',
-            description: `Project Request questionnaire. Iteration ${i}`,
-            sections: {
-              create: sections,
-            },
-          },
-        });
+        },
+      });
 
-      console.log(
-        'Seed data created:',
-        questionnaire,
-      );
-    }
+    console.log(
+      'Seed data created:',
+      questionnaire,
+      questionnaire2,
+    );
   } else {
     console.log(
       'Seed data already exists, skipping creation.',
