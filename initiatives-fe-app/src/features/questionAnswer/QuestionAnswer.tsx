@@ -21,6 +21,7 @@ type props = {
   id: number
   question: string
   questionId: number
+  updateQuestionAnswerCallback: (questionId: number, answer: string) => void
 }
 
 export const QuestionAnswer = ({
@@ -29,6 +30,7 @@ export const QuestionAnswer = ({
   questionAnswer,
   id,
   questionId,
+  updateQuestionAnswerCallback,
 }: props) => {
   const [answer, setAnswer] = useState(questionAnswer)
   const [
@@ -67,6 +69,7 @@ export const QuestionAnswer = ({
           } else {
             createQuestionAnswer({ requestId, questionId, answer })
           }
+          updateQuestionAnswerCallback(questionId, answer)
         }}
         disabled={isLoading}
         InputProps={{

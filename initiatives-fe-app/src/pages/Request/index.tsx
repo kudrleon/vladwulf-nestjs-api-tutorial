@@ -57,9 +57,7 @@ export const Request = () => {
       getRequest(Number(id))
     }
   }, [id])
-
   const requestObject = request || requestTemplate
-
   const questionnaireData = requestObject?.questionnaire
   const isStepSkipped = (step: number) => {
     return skipped.has(step)
@@ -71,7 +69,6 @@ export const Request = () => {
     ["Basic info"],
   )
   useEffect(() => {
-    console.log(requestObject)
     const progressValues = [
       {
         questions: [
@@ -135,6 +132,9 @@ export const Request = () => {
   const handleBack = () => {
     navigate(`/request/${id}/${urlStep - 1}`)
   }
+  
+  
+
   return [
     <Drawer
       variant="permanent"
@@ -180,8 +180,8 @@ export const Request = () => {
           const progressStatus = stepsProgress[index]
 
           return (
-            <Step key={label} {...stepProps}>
-              <StepLabel {...labelProps}>
+            <Step key={`${label}-${index}-${progressStatus}`} {...stepProps}>
+              <StepLabel {...labelProps} key={`${label}-${index}-${progressStatus}`}>
                 <Typography sx={{ textAlign: "left" }}>
                   Step {index + 1}
                 </Typography>
@@ -234,10 +234,12 @@ export const Request = () => {
           isLastStep={activeStep === steps.length - 1}
           activeStep={activeStep}
           updateProgressValue={(value: number) => {
-            const updatedSteps = stepsProgress
-            updatedSteps[activeStep] = value
-            console.log(updatedSteps)
-            updateStepsProgress(updatedSteps)
+            if (value !== stepsProgress[activeStep]) {
+              const updatedSteps = [...stepsProgress]
+              updatedSteps[activeStep] = value
+              console.log('update', updatedSteps)
+              updateStepsProgress(updatedSteps)
+            }
           }}
           isFinishDisabled={isFinishDisabled}
         />
