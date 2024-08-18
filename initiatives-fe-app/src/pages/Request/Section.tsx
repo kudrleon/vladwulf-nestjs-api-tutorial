@@ -1,10 +1,10 @@
 import { Box, Button, Typography } from "@mui/material"
+import React, { useEffect, useState } from "react"
 
-import React from "react"
 import { Fragment } from "react/jsx-runtime"
 import { QuestionAnswer } from "../../features/questionAnswer/QuestionAnswer"
-import type { question } from "../../types/question.type"
 import { calculateProgress } from "../../utils/calculateProgress"
+import type { question } from "../../types/question.type"
 
 type props = {
   description: string
@@ -29,8 +29,34 @@ export const Section = ({
   updateProgressValue,
   isFinishDisabled,
 }: props) => {
-  const progressValue = calculateProgress(questions)
+  const [questionsState, setQuestionsState] = useState<question[]>([])
+  const progressValue = calculateProgress(questionsState)
   updateProgressValue(Math.round(progressValue))
+
+  useEffect(() => {
+    setQuestionsState(questions)
+  }, [questions])
+
+  const updateQuestionAnswer = (questionId: number, answer?: string) => {
+    if (!answer) return
+    const updatedQuestions = questionsState.map((question: question) => {
+      if (question.id === questionId) {
+        return {
+          ...question,
+          questionAnswers: [
+            {
+              ...question.questionAnswers?.[0],
+              answer,
+            },
+          ],
+        }
+      }
+      return question
+    })
+    console.log(updatedQuestions);
+    setQuestionsState(updatedQuestions)
+  }
+
   return (
     <Fragment>
       <Typography sx={{ mt: 2, mb: 1 }}>{description}</Typography>
@@ -46,6 +72,7 @@ export const Section = ({
                 questionId={question.id}
                 requestId={requestId}
                 questionAnswer={question.questionAnswers?.[0]?.answer}
+                updateQuestionAnswerCallback={updateQuestionAnswer}
               />
             </React.Fragment>
           ))}
