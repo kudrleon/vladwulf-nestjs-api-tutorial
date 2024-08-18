@@ -1,12 +1,12 @@
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom"
 
-import { FirstLogin } from "./pages/FirstLogin"
 import { Home } from "./pages/Home"
 import { LoggedInLayout } from "./layouts/loggedinLayout"
 import { Login } from "./pages/Login"
-import { NewRequest } from "./pages/NewRequest"
 import { NotFound } from "./pages/NotFound"
 import { PrivateRouter } from "./pages/PrivateRoutes"
+import { Profile } from "./pages/Profile"
+import { Request } from "./pages/Request"
 import { SignUp } from "./pages/SignUp"
 
 export default function RoutesMap() {
@@ -21,9 +21,11 @@ export default function RoutesMap() {
         <Route element={<PrivateRouter />}>
           <Route element={<LoggedInLayout />}>
             <Route path="/" element={<Home />} />
-            <Route path="/new-request" element={<NewRequest />} />
+            <Route path="/new-request" element={<Request />} />
+            <Route path="/request/:id" element={<Request />} />
+            <Route path="/request/:id/:step" element={<Request />} />
+            <Route path="/profile" element={<Profile />} />
           </Route>
-          <Route path="/first-login" element={<FirstLogin />} />
         </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>

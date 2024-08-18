@@ -1,27 +1,18 @@
-import {
-  Button,
-  Card,
-  CardActions,
-  CardContent,
-  CardMedia,
-  Typography,
-} from "@mui/material"
+import { Card, CardContent, CardMedia, Typography } from "@mui/material"
 
 import { useGetUserQuery } from "../../features/auth/usersAPISlice"
 
-export const RequestCard = ({ title, owner, userId }: any) => {
-
+export const RequestCard = ({ title, owner, userId, onClick }: any) => {
   const { data, isFetching } = useGetUserQuery(userId, {
     // perform a refetch every 5mins
     pollingInterval: 300000,
-  });
-  console.log(data, { title, owner, userId });
+  })
   return (
-    <Card sx={{ maxWidth: 345 }}>
+    <Card sx={{ maxWidth: 345 }} onClick={onClick}>
       <CardMedia
-        sx={{ 
-            height: 140,
-            backgroundSize: "contain",
+        sx={{
+          height: 140,
+          backgroundSize: "contain",
         }}
         image="https://media.tenor.com/xQ2xI0v5bVAAAAAe/nothing-to-add-rege-jean-page.png"
         title="No files added"
@@ -31,7 +22,8 @@ export const RequestCard = ({ title, owner, userId }: any) => {
           {title}
         </Typography>
         <Typography variant="body2" color="text.secondary">
-            Created By: {isFetching ? "Loading..." : `${data?.firstName} ${data?.lastName}`}
+          Created By:{" "}
+          {isFetching ? "Loading..." : `${data?.firstName} ${data?.lastName}`}
         </Typography>
         <Typography variant="body2" color="text.secondary">
           Assigned to: {owner}

@@ -79,3 +79,10 @@ Swagger  [localhost:8080/api](localhost:8080/api)
 Prisma Studio  [localhost:5555](localhost:5555)
 
 Dev postgresql [localhost:5432](localhost:5432) username postgres password 123
+
+# Testing
+By default e2e tests will be ran on default docker compose up command
+You can modify it by:
+ - Specifying initiatives-api-test-watch
+   `docker compose -f docker-compose-dev.yml up -d initiatives-api-test-watch`
+ - Specifying any other service(initiatives-api-test-watch is not dependency for any other services)

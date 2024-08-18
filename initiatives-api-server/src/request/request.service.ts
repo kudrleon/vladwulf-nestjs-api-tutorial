@@ -5,6 +5,7 @@ import {
 
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
+import { defaultQuestionnaireId } from '../utils/consts';
 
 @Injectable()
 export class RequestService {
@@ -18,6 +19,7 @@ export class RequestService {
       data: {
         userId,
         ...createRequestDto,
+        questionnaireId: defaultQuestionnaireId,
       },
     });
   }
@@ -26,7 +28,35 @@ export class RequestService {
     return this.prisma.request.findMany();
   }
 
-  getRequestById(id: string) {
+  async getRequestTemplate() {
+    const questionnaire =
+      await this.prisma.questionnaire.findFirst({
+        where: {
+          id: defaultQuestionnaireId,
+        },
+        include: {
+          sections: {
+            include: {
+              questions: {
+                include: {
+                  questionAnswers: {
+                    where: {
+                      requestId: -1,
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      });
+    const emptyRequest = new CreateRequestDto({});
+    return {
+      ...emptyRequest,
+      questionnaire,
+    };
+  }
+  getRequestById(id: number) {
     return this.prisma.request.findFirst({
       where: {
         id,
@@ -38,7 +68,11 @@ export class RequestService {
               include: {
                 questions: {
                   include: {
-                    questionAnswers: true,
+                    questionAnswers: {
+                      where: {
+                        requestId: id,
+                      },
+                    },
                   },
                 },
               },
@@ -61,7 +95,10 @@ export class RequestService {
     id: number,
     updateRequestDto: EditRequestDto,
   ) {
-    return `This action updates a #${id} request`;
+    return {
+      message: `This action updates a #${id} request`,
+      status: 204,
+    };
   }
 
   remove(id: number) {

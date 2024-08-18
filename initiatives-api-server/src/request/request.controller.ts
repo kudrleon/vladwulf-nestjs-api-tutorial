@@ -1,35 +1,37 @@
 import {
-  Controller,
-  Get,
-  Post,
   Body,
-  Patch,
-  Param,
+  Controller,
   Delete,
+  Get,
+  Param,
   ParseIntPipe,
+  Patch,
+  Post,
   UseGuards,
-  Req,
 } from '@nestjs/common';
 import { GetUser } from '../auth/decorator';
 import { JwtGuard } from '../auth/guard';
-import { RequestService } from './request.service';
 import {
   CreateRequestDto,
   EditRequestDto,
 } from './dto';
+import { RequestService } from './request.service';
 
 @UseGuards(JwtGuard)
 @Controller('requests')
 export class RequestController {
   constructor(
-    private readonly requestService: RequestService,
+    private readonly requestService: RequestService, // private readonly questionAnswerService: QuestionAnswerService,
   ) {}
 
   @Post()
-  create(
+  async create(
     @GetUser('id') userId: number,
     @Body() createRequestDto: CreateRequestDto,
   ) {
+    console.log(createRequestDto);
+    // For now we will have first created questionnaire as default
+    // const questionnaire = await this.questionAnswerService.getOldestQuestionAnswer()
     return this.requestService.create(
       userId,
       createRequestDto,
@@ -50,9 +52,14 @@ export class RequestController {
     return this.requestService.getRequests();
   }
 
+  @Get('template')
+  getRequestTemplate() {
+    return this.requestService.getRequestTemplate();
+  }
+
   @Get(':id')
   getRequestById(
-    @Param('id', ParseIntPipe) requestId: string,
+    @Param('id', ParseIntPipe) requestId: number,
   ) {
     return this.requestService.getRequestById(
       requestId,

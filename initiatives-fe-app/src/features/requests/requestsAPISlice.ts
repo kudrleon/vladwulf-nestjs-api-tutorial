@@ -31,7 +31,45 @@ export const requestsAPI = createApi({
         },
       }),
     }),
+    getRequest: builder.query({
+      query: id => ({
+        url: `requests/${id}`,
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      }),
+    }),
+    updateRequest: builder.mutation({
+      query: ({ id, ...body }) => ({
+        url: `requests/${id}`,
+        method: "PATCH",
+        body,
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      }),
+    }),
+    getRequestTemplate: builder.query({
+      query: () => ({
+        url: "requests/template",
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      }),
+    }),
   }),
 })
 
-export const { useGetRequestsQuery, useCreateRequestMutation } = requestsAPI
+export const {
+  useGetRequestsQuery,
+  useLazyGetRequestsQuery,
+  useGetRequestTemplateQuery,
+  useLazyGetRequestQuery,
+  useCreateRequestMutation,
+  useUpdateRequestMutation,
+} = requestsAPI
